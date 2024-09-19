@@ -17,6 +17,7 @@ public class Main {
             switch (input) {
                 case 0:
                     System.out.println("Gracia pibe");
+                    System.out.println("SARACATUNGA!");
                     break;
                 // Create a new product.
                 case 1:
