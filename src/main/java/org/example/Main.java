@@ -16,28 +16,28 @@ public class Main {
 
             switch (input) {
                 case 0:
-                    System.out.println("Gracia pibe");
+                    System.out.println("Gracias pibe");
                     break;
                 // Create a new product.
                 case 1:
-                    System.out.println("Gracia pibe 1");
+                    System.out.println("Gracias pibe 1");
                     break;
                 // Display entities.
                 case 2:
-                    System.out.println("Gracia pibe 2");
+                    System.out.println("Gracias pibe 2");
                     break;
                 // Update a product.
                 case 3:
-                    System.out.println("Gracia pibe 3");
+                    System.out.println("Gracias pibe 3");
                     break;
                 case 4:
-                    System.out.println("Gracia pibe 4");
+                    System.out.println("Gracias pibe 4");
                     break;
                 case 5:
-                    System.out.println("Gracia pibe 5");
+                    System.out.println("Gracias pibe 5");
                     break;
                 case 6:
-                    System.out.println("Gracia pibe 6");
+                    System.out.println("Gracias pibe 6");
                     break;
                 default:
                     System.out.println("Wrong option, try again!");
