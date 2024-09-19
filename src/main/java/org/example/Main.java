@@ -31,7 +31,7 @@ public class Main {
                     System.out.println("Gracias pibe 3");
                     break;
                 case 4:
-                    System.out.println("Gracias pibe 4");
+                    System.out.println("Gracias pibe 43");
                     break;
                 case 5:
                     System.out.println("Gracias pibe 5");
