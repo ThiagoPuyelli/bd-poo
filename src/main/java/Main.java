@@ -1,7 +1,5 @@
-package org.example;
 import utils.Input;
 
-import javax.persistence.*;
 import java.util.Scanner;
 
 public class Main {
