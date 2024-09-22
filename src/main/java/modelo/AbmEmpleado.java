@@ -91,8 +91,12 @@ public class AbmEmpleado {
         try {
             // busco los empleados con JPQL
             List<Empleado> empleados = entityManager.createQuery("SELECT e FROM Empleado e", Empleado.class).getResultList();
+            // fix this query.
+            String esAnalista = entityManager.createNativeQuery("SELECT DNI FROM EMPLEADO E  WHERE E.DNI IN (SELECT DNI FROM ANALISTA A WHERE A.DNI = E.DNI)").toString();
+            String tipo = esAnalista.isEmpty() ? "Programador" : "Analista";
             System.out.println("--------------------------------");
             empleados.forEach(empleado -> {
+                System.out.println(tipo);
                 System.out.println(empleado);
                 System.out.println("--------------------------------");
             });
