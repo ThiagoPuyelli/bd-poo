@@ -19,7 +19,7 @@ public class ABMGerencia implements ABM {
             System.out.println("1. Modificacion");
             System.out.println("1. Lectura");
 
-            
+
         }
 
     }
