@@ -1,10 +1,12 @@
 package org.example;
+import utils.ABM;
 import utils.ClassFinder;
 import utils.EntradaGenerica;
 import Entidades.Gerencia;
 import utils.Input;
 
 import javax.persistence.*;
+import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Scanner;
 
@@ -31,7 +33,13 @@ public class Main {
                     i++;
                 }
                 int opcion = scanner.nextInt();
-                Class<?> clase = clases.get(opcion);
+                if (opcion > clases.size()) {
+                    System.out.println("La opción es incorrecta");
+                } else {
+                    Class<?> clase = clases.get(opcion - 1);
+                    ABM instancia = (ABM) clase.getDeclaredConstructor().newInstance();
+
+                }
             } catch (ClassNotFoundException e) {
                 e.printStackTrace(); // Muestra la traza del error
             }
