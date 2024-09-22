@@ -12,12 +12,12 @@ public class EntradaGenerica<T> {
         this.entidad = entidad;
     }
 
-    public void pedirDatos () {
+    public void pedirDatos (List<String> camposIgnorar) {
         for (Field field : entidad.getClass().getDeclaredFields()) {
             field.setAccessible(true);
-            //if (camposIgnorar != null && camposIgnorar.contains(field.getName())) {
-            //    continue;
-            //}
+            if (camposIgnorar != null && camposIgnorar.contains(field.getName())) {
+                continue;
+            }
             Scanner scanner = new Scanner(System.in);
             Type type = field.getGenericType();
             System.out.println(type.getTypeName());

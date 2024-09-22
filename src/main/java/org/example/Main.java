@@ -38,9 +38,13 @@ public class Main {
                 } else {
                     Class<?> clase = clases.get(opcion - 1);
                     ABM instancia = (ABM) clase.getDeclaredConstructor().newInstance();
+
+                    instancia.iniciarABM();
                 }
             } catch (ClassNotFoundException e) {
                 e.printStackTrace(); // Muestra la traza del error
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             i = 1;
         }
