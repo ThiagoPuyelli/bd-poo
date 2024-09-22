@@ -7,6 +7,7 @@ import utils.Input;
 
 import javax.persistence.*;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -37,11 +38,13 @@ public class Main {
                     System.out.println("La opción es incorrecta");
                 } else {
                     Class<?> clase = clases.get(opcion - 1);
-                    ABM instancia = (ABM) clase.getDeclaredConstructor().newInstance();
-
+                    ABM intancia = (ABM) clase.getDeclaredConstructor().newInstance();
                 }
             } catch (ClassNotFoundException e) {
                 e.printStackTrace(); // Muestra la traza del error
+            }
+            catch (Exception e) {
+                e.printStackTrace();
             }
             i = 1;
         }
