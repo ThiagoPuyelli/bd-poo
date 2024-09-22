@@ -40,7 +40,31 @@ public class AbmEmpleado {
                 // Crear un nuevo empleado.
                 case 1:
                     crearEmpleado(scanner);
+                    break;
+                // Mostrar todos los empleados.
+                case 2:
+                    mostrarEmpleados(scanner);
+                    break;
             }
+        }
+    }
+
+    // Muestra todos los empleados.
+    private static void mostrarEmpleados(Scanner scanner) {
+        System.out.println("EMPLEADOS\n");
+        try {
+            // busco los empleados con JPQL
+            List<Empleado> empleados = entityManager.createQuery("SELECT e FROM Empleado e", Empleado.class).getResultList();
+            System.out.println("--------------------------------");
+            empleados.forEach(empleado -> {
+                System.out.println("Nombre: " + empleado.getNombre());
+                System.out.println("Apellido: " + empleado.getApellido());
+                System.out.println("DNI: " + empleado.getDni());
+                System.out.println("--------------------------------");
+            });
+        } catch (Exception e) {
+            System.out.println("Ha ocurrido un error.");
+            e.printStackTrace();
         }
     }
 
