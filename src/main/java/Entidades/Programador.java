@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name = "PROGRAMADOR")
 public class Programador {
     @Id
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "dni")
     private Empleado empleado;
 

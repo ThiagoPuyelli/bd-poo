@@ -45,8 +45,44 @@ public class AbmEmpleado {
                 case 2:
                     mostrarEmpleados(scanner);
                     break;
+                // Actualizar un empleado
+                case 3:
+                    break;
+                // borrar un empleado.
+                case 4:
+                    borrarEmpleado(scanner);
+                    break;
+
             }
         }
+    }
+
+    private static void borrarEmpleado(Scanner scanner) {
+        entityTransaction = entityManager.getTransaction();
+        entityTransaction.begin();
+        try {
+            Empleado empleado = encontrarEmpleado(scanner);
+            System.out.println(empleado);
+            if (empleado == null) {
+                System.out.println("Empleado no encontrado.");
+                return;
+            }
+            System.out.println("El empleado a ser borrado es el siguiente:");
+            mostrarEmpleadoPorDni(empleado.getDni());
+            entityManager.remove(empleado);
+            entityTransaction.commit();
+            System.out.println("Empleado borrado con exito!");
+        } catch (Exception e) {
+            System.out.println("Ha ocurrido un error.");
+            entityTransaction.rollback();
+        }
+    }
+
+    // Busca un empleado.
+    private static Empleado encontrarEmpleado(Scanner scanner) {
+        System.out.print("Ingrese el DNI: ");
+        String dni = scanner.nextLine();
+        return entityManager.find(Empleado.class, dni);
     }
 
     // Muestra todos los empleados.
@@ -62,6 +98,7 @@ public class AbmEmpleado {
             });
         } catch (Exception e) {
             System.out.println("Ha ocurrido un error.");
+            entityTransaction.rollback();
             e.printStackTrace();
         }
     }
@@ -97,6 +134,7 @@ public class AbmEmpleado {
             // hacer un query y mostrar el empleado creado.
             mostrarEmpleadoPorDni(empleado.getDni());
         } catch (Exception e) {
+            entityTransaction.rollback();
             e.printStackTrace(); // cambiar.
         }
     }
@@ -109,6 +147,7 @@ public class AbmEmpleado {
             System.out.println(empleado);
         } catch (Exception e) {
             System.out.println("Ha ocurrido un error!");
+            entityTransaction.rollback();
             e.printStackTrace();
         }
     }
@@ -125,7 +164,7 @@ public class AbmEmpleado {
         System.out.println("Por favor, seleccione una opcion: ");
         System.out.println("1- Crear un empleado.");
         System.out.println("2- Mostrar todos los empleados.");
-        System.out.println("3- Actualiar un empleado.");
+        System.out.println("3- Actualizar un empleado.");
         System.out.println("4- Borrar un empleado.");
         System.out.println("0- Exit.");
     }
