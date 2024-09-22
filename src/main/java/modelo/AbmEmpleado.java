@@ -53,7 +53,8 @@ public class AbmEmpleado {
                 case 4:
                     borrarEmpleado(scanner);
                     break;
-
+                default:
+                    System.out.println("Opcion incorrecta!");
             }
         }
     }
@@ -90,7 +91,6 @@ public class AbmEmpleado {
     private static void mostrarEmpleados(Scanner scanner) {
         System.out.println("EMPLEADOS\n");
         try {
-            // busco los empleados con JPQL
             List<Empleado> analistas = entityManager.createNativeQuery("SELECT E.NOMBRE, E.APELLIDO, E.DNI FROM EMPLEADO E INNER JOIN ANALISTA A ON E.DNI = A.DNI", Empleado.class).getResultList();
             List<Empleado> programadores = entityManager.createNativeQuery("SELECT E.NOMBRE, E.APELLIDO, E.DNI FROM EMPLEADO E INNER JOIN PROGRAMADOR P ON E.DNI = P.DNI", Empleado.class).getResultList();
 
