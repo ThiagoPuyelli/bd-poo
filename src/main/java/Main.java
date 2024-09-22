@@ -1,3 +1,4 @@
+import modelo.AbmEmpleado;
 import utils.Input;
 
 import java.util.Scanner;
@@ -30,7 +31,7 @@ public class Main {
                     System.out.println("Gracia pibe 3");
                     break;
                 case 4:
-                    System.out.println("Gracia pibe 4");
+                    AbmEmpleado.mostrarABM();
                     break;
                 case 5:
                     System.out.println("Gracia pibe 5");

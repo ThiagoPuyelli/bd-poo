@@ -3,9 +3,9 @@ package Entidades;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "PROGRAMADOR")
 public class Programador {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private String dni;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "empleado_id")

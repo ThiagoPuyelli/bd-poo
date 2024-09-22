@@ -17,7 +17,7 @@ public class AbmEmpleado {
     private static EntityManager entityManager;
     private static EntityTransaction entityTransaction;
     private final static Scanner scanner = new Scanner(System.in);
-    private static final String NOMBREBD = "DER-EJERC8";
+    private static final String NOMBREBD = "analista";
 
     // Menu general para ejecutar los metodos del ABM.
     public static void mostrarABM() {
@@ -40,11 +40,9 @@ public class AbmEmpleado {
                 case 1:
                     crearEmpleado(scanner);
             }
-
         }
-
     }
-    
+
     // ALTA empleado.
     private static void crearEmpleado(Scanner scanner) {
         entityTransaction = entityManager.getTransaction();
@@ -59,12 +57,18 @@ public class AbmEmpleado {
         int tipoEmpleado = obtenerNumero(scanner, 2);
         try {
             Empleado empleado = new Empleado(apellido, dni, nombre);
-            // seteo el tipo de empleado.
-            if (tipoEmpleado == 1)
-                empleado.setAnalista(new Analista(empleado.getDni()));
-            else
-                empleado.setProgramador(new Programador(empleado.getDni()));
+            Analista analista;
+            Programador programador;
             entityManager.persist(empleado);
+            // seteo el tipo de empleado.
+            if (tipoEmpleado == 1) {
+                analista = new Analista(empleado);
+                entityManager.persist(analista);
+            }
+            else {
+                programador = new Programador(empleado.getDni());
+                entityManager.persist(programador);
+            }
             entityTransaction.commit();
             System.out.println("Empleado creado correctamente!\n");
         } catch (Exception e) {
@@ -76,6 +80,7 @@ public class AbmEmpleado {
     private static void exitApp() {
         if (entityManager != null) entityManager.close();
         if (entityManagerFactory != null) entityManagerFactory.close();
+        scanner.close();
     }
 
     // Menu de opciones.
@@ -87,7 +92,5 @@ public class AbmEmpleado {
         System.out.println("4- Borrar un empleado.");
         System.out.println("0- Exit.");
     }
-
-
 
 }
