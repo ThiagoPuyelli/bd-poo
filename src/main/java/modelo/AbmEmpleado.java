@@ -66,11 +66,12 @@ public class AbmEmpleado {
                 entityManager.persist(analista);
             }
             else {
-                programador = new Programador(empleado.getDni());
+                programador = new Programador(empleado);
                 entityManager.persist(programador);
             }
             entityTransaction.commit();
             System.out.println("Empleado creado correctamente!\n");
+            // hacer un query y mostrar el empleado creado.
         } catch (Exception e) {
             e.printStackTrace(); // cambiar.
         }
