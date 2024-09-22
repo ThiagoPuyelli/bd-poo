@@ -10,6 +10,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import static utils.Input.obtenerNumero;
 
@@ -90,19 +91,21 @@ public class AbmEmpleado {
         System.out.println("EMPLEADOS\n");
         try {
             // busco los empleados con JPQL
-            List<Empleado> empleados = entityManager.createQuery("SELECT e FROM Empleado e", Empleado.class).getResultList();
-            // fix this query.
-            String esAnalista = entityManager.createNativeQuery("SELECT DNI FROM EMPLEADO E  WHERE E.DNI IN (SELECT DNI FROM ANALISTA A WHERE A.DNI = E.DNI)").toString();
-            String tipo = esAnalista.isEmpty() ? "Programador" : "Analista";
-            System.out.println("--------------------------------");
-            empleados.forEach(empleado -> {
-                System.out.println(tipo);
-                System.out.println(empleado);
-                System.out.println("--------------------------------");
+            List<Empleado> analistas = entityManager.createNativeQuery("SELECT E.NOMBRE, E.APELLIDO, E.DNI FROM EMPLEADO E INNER JOIN ANALISTA A ON E.DNI = A.DNI", Empleado.class).getResultList();
+            List<Empleado> programadores = entityManager.createNativeQuery("SELECT E.NOMBRE, E.APELLIDO, E.DNI FROM EMPLEADO E INNER JOIN PROGRAMADOR P ON E.DNI = P.DNI", Empleado.class).getResultList();
+
+            analistas.forEach(a -> {
+                System.out.println("ANALISTAS");
+                System.out.println(a);
             });
+
+            programadores.forEach(p -> {
+                System.out.println("PROGRAMADORES");
+                System.out.println(p);
+            });
+
         } catch (Exception e) {
             System.out.println("Ha ocurrido un error.");
-            entityTransaction.rollback();
             e.printStackTrace();
         }
     }

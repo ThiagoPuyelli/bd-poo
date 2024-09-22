@@ -13,6 +13,14 @@ public class Programador {
     public Programador() {
     }
 
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
+    }
+
     public Programador(Empleado empleado) {
         this.empleado = empleado;
     }
