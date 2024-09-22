@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.List;
 import java.util.Scanner;
 
 import static utils.Input.obtenerNumero;
@@ -72,8 +73,21 @@ public class AbmEmpleado {
             entityTransaction.commit();
             System.out.println("Empleado creado correctamente!\n");
             // hacer un query y mostrar el empleado creado.
+            mostrarEmpleadoPorDni(empleado.getDni());
         } catch (Exception e) {
             e.printStackTrace(); // cambiar.
+        }
+    }
+
+    // Dado un DNI lo muestra por pantalla.
+    private static void mostrarEmpleadoPorDni(String dni) {
+        System.out.println("Datos del empleado");
+        try {
+            Empleado empleado = entityManager.find(Empleado.class, dni);
+            System.out.println(empleado);
+        } catch (Exception e) {
+            System.out.println("Ha ocurrido un error!");
+            e.printStackTrace();
         }
     }
 

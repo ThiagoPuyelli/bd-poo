@@ -50,10 +50,12 @@ public class Empleado {
 
     @Override
     public String toString() {
-        return "Empleado{" +
-                "apellido='" + apellido + '\'' +
-                ", dni='" + dni + '\'' +
-                ", nombre='" + nombre + '\'' +
-                '}';
+        return String.format(
+                "Empleado: \n" +
+                        " Nombre: %s\n" +
+                        " Apellido: %s\n" +
+                        " DNI: %s\n",
+                nombre, apellido, dni
+        );
     }
 }
