@@ -57,9 +57,7 @@ public class AbmEmpleado {
             List<Empleado> empleados = entityManager.createQuery("SELECT e FROM Empleado e", Empleado.class).getResultList();
             System.out.println("--------------------------------");
             empleados.forEach(empleado -> {
-                System.out.println("Nombre: " + empleado.getNombre());
-                System.out.println("Apellido: " + empleado.getApellido());
-                System.out.println("DNI: " + empleado.getDni());
+                System.out.println(empleado);
                 System.out.println("--------------------------------");
             });
         } catch (Exception e) {

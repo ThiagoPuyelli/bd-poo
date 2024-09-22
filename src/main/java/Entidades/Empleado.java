@@ -51,7 +51,6 @@ public class Empleado {
     @Override
     public String toString() {
         return String.format(
-                "Empleado: \n" +
                         " Nombre: %s\n" +
                         " Apellido: %s\n" +
                         " DNI: %s\n",
