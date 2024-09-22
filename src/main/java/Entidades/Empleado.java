@@ -6,11 +6,19 @@ import javax.persistence.*;
 public class Empleado {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+
+    @Column(length = 8, nullable = false, unique = true)
     private String dni;
+
+    @Column(length = 30, nullable = false)
     private String nombre;
+
+    @Column(length = 30, nullable = false)
     private String apellido;
+
     @OneToOne(mappedBy = "empleado")
     private Analista analista;
+
     @OneToOne(mappedBy = "empleado")
     private Programador programador;
 
@@ -45,6 +53,22 @@ public class Empleado {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public void setAnalista(Analista analista) {
+        this.analista = analista;
+    }
+
+    public Analista getAnalista() {
+        return analista;
+    }
+
+    public Programador getProgramador() {
+        return programador;
+    }
+
+    public void setProgramador(Programador programador) {
+        this.programador = programador;
     }
 
     @Override
