@@ -1,5 +1,5 @@
 package utils;
 
 public interface ABM {
-    void mostrarMenu ();
+    void iniciarABM ();
 }

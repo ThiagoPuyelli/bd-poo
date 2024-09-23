@@ -10,7 +10,7 @@ public class Conoce {
     @Column(nullable = false)
     private String dni;
     @ManyToMany
-    @JoinColumn(name = "idLang", foreignKey = @ForeignKey(name = "id"))
+    @JoinColumn(name = "id_lenguaje", foreignKey = @ForeignKey(name = "id"))
     @Column(nullable = false)
     private String idLlang;
     @Column(length = 10, nullable = false)

@@ -157,7 +157,7 @@ public class ABMEmpleado implements ABM {
         entityTransaction = entityManager.getTransaction();
         entityTransaction.begin(); // comienzo la transaccion
         entradaGenerica.pedirDatos(null);
-        System.out.print("Ingrese el tipo de empleado (1 Analista) (2 progamador) ");
+        System.out.print("Ingrese el tipo de empleado (1 Analista) (2 programador) ");
         int tipoEmpleado = obtenerNumero(scanner, 2);
         try {
             Analista analista;

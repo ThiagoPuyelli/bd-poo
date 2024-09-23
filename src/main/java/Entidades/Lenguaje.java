@@ -7,14 +7,12 @@ import javax.persistence.*;
 public class Lenguaje {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(length = 30, nullable = false)
+    @Column(length = 30, nullable = false, unique = true)
     private String id;
     @Column(length = 30, columnDefinition = "")
     private String nombre;
 
-    public Lenguaje(String nombre) {
-        this.nombre = nombre;
-    }
+    public Lenguaje() {}
 
     public String getId() {
         return id;
