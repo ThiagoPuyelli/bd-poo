@@ -7,6 +7,7 @@ import javax.persistence.Persistence;
 import java.util.List;
 import java.util.Scanner;
 
+import Entidades.Conoce;
 import Entidades.Empleado;
 import Entidades.Lenguaje;
 import utils.ABM;
@@ -15,23 +16,23 @@ import utils.EntradaGenerica;
 import static utils.EntradaNro.obtenerNumero;
 import static utils.Menu.mostrarMenu;
 
-public class ABMLenguaje implements ABM {
+public class ABMConoce implements ABM {
     private static EntityManagerFactory emf;
     private static EntityManager em;
     private static EntityTransaction et;
     private static final Scanner scanner = new Scanner(System.in);
     private static final String NOMBREBD = "analista";
-    private static final Lenguaje lenguaje = new Lenguaje();
-    private static final EntradaGenerica<Lenguaje> entradaGenerica = new EntradaGenerica<>(lenguaje);
+    private static final Conoce relConoce = new Conoce();
+    private static final EntradaGenerica<Conoce> entradaGenerica = new EntradaGenerica<>(relConoce);
 
     @Override
     public void iniciarABM() {
         emf = Persistence.createEntityManagerFactory(NOMBREBD); //
         em = emf.createEntityManager();
-        System.out.println("ABM LENGUAJE");
+        System.out.println("ABM DE LOS LENGUAJES DE PROGRAMACION CONOCIDOS POR UN PROGRAMADOR");
         int opcion = -1;
         while (opcion != 0) {
-            mostrarMenu("lenguaje de programación");
+            mostrarMenu(">> Lenguajes conocidos por el programador");
             opcion = obtenerNumero(scanner);
             scanner.nextLine();
 

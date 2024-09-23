@@ -16,16 +16,7 @@ public class Conoce {
     @Column(length = 10, nullable = false)
     private String nivel;
 
-    public Conoce(String dni, String idLlang) {
-        this.dni = dni;
-        this.idLlang = idLlang;
-    }
-
-    public Conoce(String dni, String idLlang, String nivel) {
-        this.dni = dni;
-        this.idLlang = idLlang;
-        this.nivel = nivel;
-    }
+    public Conoce() {}
 
     public String getDni() {
         return dni;
