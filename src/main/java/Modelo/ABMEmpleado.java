@@ -15,8 +15,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import static utils.EntradaNro.obtenerNumero;
-import static utils.Menu.mostrarAtributosModificables;
-import static utils.Menu.mostrarMenu;
+import static utils.Menu.*;
 
 public class ABMEmpleado implements ABM {
     private static EntityManagerFactory entityManagerFactory;
@@ -51,7 +50,7 @@ public class ABMEmpleado implements ABM {
                     break;
                 // Mostrar todos los empleados.
                 case 2:
-                    mostrarEmpleados(scanner);
+                    mostrarEmpleados();
                     break;
                 // Actualizar un empleado
                 case 3:
@@ -62,7 +61,7 @@ public class ABMEmpleado implements ABM {
                     borrarEmpleado(scanner);
                     break;
                 default:
-                    System.out.println("Opcion incorrecta!");
+                    System.out.println("Entrada invalida!");
             }
         }
     }
@@ -78,7 +77,7 @@ public class ABMEmpleado implements ABM {
                 return;
             }
             // Modificar los atributos del empleado.
-            mostrarAtributosModificables();
+            mostrarAtributosModificablesDeEmpleado();
             int opcion = obtenerNumero(scanner, 3);
             EntradaGenerica<Empleado> entrada = new EntradaGenerica<>(empleado);
             List<String> ignorar = new ArrayList<>();
@@ -130,7 +129,7 @@ public class ABMEmpleado implements ABM {
     }
 
     // Muestra todos los empleados.
-    private static void mostrarEmpleados(Scanner scanner) {
+    private static void mostrarEmpleados() {
         System.out.println("EMPLEADOS\n");
         try {
             List<Empleado> analistas = entityManager.createNativeQuery("SELECT E.NOMBRE, E.APELLIDO, E.DNI FROM EMPLEADO E INNER JOIN ANALISTA A ON E.DNI = A.DNI", Empleado.class).getResultList();

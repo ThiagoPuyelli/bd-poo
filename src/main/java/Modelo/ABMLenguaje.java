@@ -4,6 +4,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import Entidades.Empleado;
@@ -12,16 +14,17 @@ import utils.ABM;
 import utils.EntradaGenerica;
 
 import static utils.EntradaNro.obtenerNumero;
+import static utils.Menu.mostrarAtributosModificablesDeEmpleado;
 import static utils.Menu.mostrarMenu;
 
 public class ABMLenguaje implements ABM {
     private static EntityManagerFactory emf;
     private static EntityManager em;
     private static EntityTransaction et;
-    private final static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
     private static final String NOMBREBD = "analista";
-    private static Lenguaje lenguaje = new Lenguaje();
-    private  static EntradaGenerica<Lenguaje> entradaGenerica = new EntradaGenerica(lenguaje);
+    private static final Lenguaje lenguaje = new Lenguaje();
+    private static final EntradaGenerica<Lenguaje> entradaGenerica = new EntradaGenerica<>(lenguaje);
 
     @Override
     public void iniciarABM() {
@@ -37,40 +40,136 @@ public class ABMLenguaje implements ABM {
             switch (opcion) {
                 // caso para salir.
                 case 0:
-                    System.out.println("Saliendo del ABM Empleado ...!");
+                    System.out.println("Saliendo del ABM Lenguaje ...!\n");
                     exitApp();
                     break;
-                // Crear un nuevo empleado.
+                // Crear un nuevo lenguaje.
                 case 1:
-                    crearEmpleado(scanner);
+                    altaDeTupla(scanner);
                     break;
-                // Mostrar todos los empleados.
+                // Mostrar todos los lenguajes.
                 case 2:
-                    mostrarEmpleados(scanner);
+                    mostrarTuplas();
                     break;
-                // Actualizar un empleado
+                // Actualizar un lenguaje
                 case 3:
-                    actualizarEmpleado(scanner);
+                    modificarTupla(scanner);
                     break;
-                // borrar un empleado.
+                // borrar un lenguaje
                 case 4:
-                    borrarEmpleado(scanner);
+                    bajaDeTupla(scanner);
                     break;
                 default:
-                    System.out.println("Opcion incorrecta!");
+                    System.out.println("Entrada invalida!");
             }
         }
     }
 
-    public void altaDeTupla() {
-
+    public void altaDeTupla(Scanner scn) {
+        List<String> ignoreList = List.of(new String[]{"id"});
+        entradaGenerica.pedirDatos(ignoreList);
+        try {
+            Lenguaje lenguaje1 = em.find(Lenguaje.class, lenguaje.getNombre());
+            if (lenguaje1 != null) System.out.println(">> El lenguaje ya existe en la tabla\n");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        et = em.getTransaction();
+        et.begin();// comienzo la transaccion
+        try {
+            em.persist(lenguaje);
+            et.commit();
+            System.out.println("Lenguaje de programación insertado correctamente!\n");
+            // hacer un query y mostrar el empleado creado.
+            mostrarLenguajePorID(lenguaje.getId());
+        } catch (Exception e) {
+            et.rollback();
+            e.printStackTrace();
+        }
     }
 
-    public void bajaDeTupla() {
-
+    public void bajaDeTupla(Scanner scn) {
+        et = em.getTransaction();
+        et.begin();
+        try {
+            Lenguaje lenguaje = encontrarLenguaje();
+            System.out.println(lenguaje);
+            if (lenguaje == null) {
+                System.out.println("Lenguaje no encontrado.");
+                return;
+            }
+            System.out.println("El lenguaje a eliminar es el siguiente:");
+            mostrarLenguajePorID(lenguaje.getId());
+            em.remove(lenguaje);
+            et.commit();
+            System.out.println("Lenguaje borrado con exito!");
+        } catch (Exception e) {
+            System.out.println("Ha ocurrido un error.");
+            et.rollback();
+        }
     }
 
-    public void modificarTupla() {
+    public void modificarTupla(Scanner scn) {
+        et = em.getTransaction();
+        et.begin();
+        try {
+            Lenguaje lenguaje = encontrarLenguaje();
+            if (lenguaje == null) {
+                System.out.println("Lenguaje no encontrado");
+                return;
+            }
+            System.out.println("Ingrese el nuevo nombre: ");
+            EntradaGenerica<Lenguaje> entrada = new EntradaGenerica<>(lenguaje);
+            List<String> ignorar = List.of(new String[]{"id"});
+            // pedir datos.
+            entrada.pedirDatos(ignorar);
+            et.commit();
+            System.out.println("Lenguaje modificado con exito!");
+        } catch (Exception e) {
+            System.out.println("An error has occurred!");
+            e.printStackTrace();
+        }
+    }
 
+    public void mostrarTuplas() {
+        System.out.println("EMPLEADOS\n");
+        try {
+            List<Lenguaje> lenguajes = em.createNativeQuery("SELECT * FROM LENGUAJE ", Empleado.class).getResultList();
+
+            lenguajes.forEach(a -> {
+                System.out.println("LENGUAJES DE PROGRAMACION");
+                System.out.println(a);
+            });
+
+        } catch (Exception e) {
+            System.out.println("Ha ocurrido un error.");
+            e.printStackTrace();
+        }
+    }
+
+    private static void mostrarLenguajePorID(String id) {
+        System.out.println("Datos del Lenguaje de programación");
+        try {
+            Lenguaje lenguaje1 = em.find(Lenguaje.class, id);
+            System.out.println(lenguaje1);
+        } catch (Exception e) {
+            System.out.println("Ha ocurrido un error!");
+            et.rollback();
+            e.printStackTrace();
+        }
+    }
+
+    // Busca un lenguaje por su nombre
+    private static Lenguaje encontrarLenguaje() {
+        System.out.print("Ingrese el nombre del lenguaje: ");
+        String nombre = scanner.nextLine();
+        return em.find(Lenguaje.class, nombre);
+    }
+
+    // liberar recursos
+    private static void exitApp() {
+        if (em != null) em.close();
+        if (emf != null) emf.close();
+        scanner.close();
     }
 }

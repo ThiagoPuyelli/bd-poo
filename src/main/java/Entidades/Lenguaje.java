@@ -9,7 +9,7 @@ public class Lenguaje {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(length = 30, nullable = false, unique = true)
     private String id;
-    @Column(length = 30, columnDefinition = "")
+    @Column(length = 30, columnDefinition = "", nullable = false, unique = true)
     private String nombre;
 
     public Lenguaje() {}
