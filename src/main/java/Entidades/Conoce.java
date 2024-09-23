@@ -50,4 +50,13 @@ public class Conoce {
     public void setNivel(String nivel) {
         this.nivel = nivel;
     }
+
+    @Override
+    public String toString() {
+        return "Conoce{" +
+                "dni='" + dni + '\'' +
+                ", idLlang='" + idLlang + '\'' +
+                ", nivel='" + nivel + '\'' +
+                '}';
+    }
 }
