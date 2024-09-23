@@ -13,7 +13,7 @@
             <property name="javax.persistence.jdbc.driver" value="org.firebirdsql.jdbc.FBDriver"/>
 
             <!-- Firebird JDBC URL -->
-            <property name="javax.persistence.jdbc.url" value="jdbc:firebirdsql://localhost:30500//firebird/data/analista.fbd"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:firebirdsql://localhost:30500//firebird/data/analista.fdb"/>
             <!--Username and Password -->
             <property name="javax.persistence.jdbc.user" value="sysdba"/>
             <property name="javax.persistence.jdbc.password" value="masterkey"/>

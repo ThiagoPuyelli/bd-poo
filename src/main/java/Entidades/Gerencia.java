@@ -2,8 +2,7 @@ package Entidades;
 import javax.persistence.*;
 @Entity
 @Table(name="Gerencia")
-public class Gerencia
-{
+public class Gerencia {
     // instance variables - replace the example below with your own
     @Id
     @GeneratedValue (strategy = GenerationType.SEQUENCE)
