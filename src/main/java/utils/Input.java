@@ -1,29 +1,25 @@
 package utils;
 
+import java.lang.reflect.Type;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.lang.reflect.Field;
 
 public class Input<T> {
-    public static <T> T getInput(Scanner scanner, Class<T> type, String pedido) {
+    public static <T> T getInput(Scanner scanner, Type type, String pedido) {
         while (true) {
             try {
                 System.out.print(pedido + ": ");
-
-                if (type == Integer.class) {
-                    return type.cast(scanner.nextInt());
-                } else if (type == Double.class) {
-                    return type.cast(scanner.nextDouble());
-                } else if (type == Float.class) {
-                    return type.cast(scanner.nextFloat());
-                } else if (type == Long.class) {
-                    return type.cast(scanner.nextLong());
-                } else if (type == Boolean.class) {
-                    return type.cast(scanner.nextBoolean());
-                } else if (type == String.class) {
-                    return type.cast(scanner.nextLine());
+                if (type.getTypeName().equals("int") || type.getTypeName().equals("java.lang.Integer")) {
+                    return (T) (Integer) scanner.nextInt();
+                } else if (type.getTypeName().equals("java.lang.String")) {
+                    return (T) (String) scanner.nextLine();
+                } else if (type.getTypeName().equals("java.lang.Double") || type.getTypeName().equals("java.lang.Float")) {
+                    return (T) (Double) scanner.nextDouble();
                 } else {
-                    throw new IllegalArgumentException("Unsupported type: " + type.getSimpleName());
+                    return (T) ("Problema al recibir casteo");
                 }
+
             } catch (InputMismatchException e) {
                 System.out.println("Por favor ingrese bien el dato!");
                 scanner.nextLine(); // Clear the invalid input

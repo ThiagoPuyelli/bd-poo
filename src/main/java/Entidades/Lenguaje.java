@@ -3,12 +3,13 @@ package Entidades;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "LENGUAJE")
 public class Lenguaje {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column
+    @Column(length = 30, nullable = false)
     private String id;
-    @Column(length = 16, columnDefinition = "")
+    @Column(length = 30, columnDefinition = "")
     private String nombre;
 
     public Lenguaje(String nombre) {

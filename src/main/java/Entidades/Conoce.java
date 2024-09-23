@@ -1,16 +1,19 @@
 package Entidades;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "CONOCE")
 public class Conoce {
-    @ForeignKey
+    @ManyToMany
+    @JoinColumn(name = "dni", foreignKey = @ForeignKey(name = "dni"))
+    @Column(nullable = false)
     private String dni;
-    @ForeignKey
+    @ManyToMany
+    @JoinColumn(name = "idLang", foreignKey = @ForeignKey(name = "id"))
+    @Column(nullable = false)
     private String idLlang;
-    @Column
+    @Column(length = 10, nullable = false)
     private String nivel;
 
     public Conoce(String dni, String idLlang) {
