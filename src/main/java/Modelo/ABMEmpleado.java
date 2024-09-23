@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import static utils.EntradaNro.obtenerNumero;
+import static utils.Menu.mostrarAtributosModificables;
 import static utils.Menu.mostrarMenu;
 
 public class ABMEmpleado implements ABM {
@@ -54,6 +55,7 @@ public class ABMEmpleado implements ABM {
                     break;
                 // Actualizar un empleado
                 case 3:
+                    actualizarEmpleado(scanner);
                     break;
                 // borrar un empleado.
                 case 4:
@@ -62,6 +64,40 @@ public class ABMEmpleado implements ABM {
                 default:
                     System.out.println("Opcion incorrecta!");
             }
+        }
+    }
+
+    // Actualizar un empleado.
+    private void actualizarEmpleado(Scanner scanner) {
+        entityTransaction = entityManager.getTransaction();
+        entityTransaction.begin();
+        try {
+            Empleado empleado = encontrarEmpleado(scanner);
+            if (empleado == null) {
+                System.out.println("Empleado no encontrado");
+                return;
+            }
+            // Modificar los atributos del empleado.
+            mostrarAtributosModificables();
+            int opcion = obtenerNumero(scanner, 3);
+            EntradaGenerica<Empleado> entrada = new EntradaGenerica<>(empleado);
+            List<String> ignorar = new ArrayList<>();
+            ignorar.add("dni");
+            // pedir datos.
+            if (opcion == 1) {
+                ignorar.add("apellido");
+                entrada.pedirDatos(ignorar);
+            } else if (opcion == 2){
+                ignorar.add("nombre");
+                entrada.pedirDatos(ignorar);
+            } else {
+                entrada.pedirDatos(ignorar);
+            }
+            entityTransaction.commit();
+            System.out.println("Empleado modificado con exito!");
+        } catch (Exception e) {
+            System.out.println("An error has occurred!");
+            e.printStackTrace();
         }
     }
 
@@ -120,12 +156,6 @@ public class ABMEmpleado implements ABM {
     private static void crearEmpleado(Scanner scanner) {
         entityTransaction = entityManager.getTransaction();
         entityTransaction.begin(); // comienzo la transaccion
-//        System.out.print("Ingrese el nombre del empleado: ");
-//        String nombre = scanner.nextLine();
-//        System.out.print("Ingrese el apellido del empleado: ");
-//        String apellido = scanner.nextLine();
-//        System.out.print("Ingrese el dni del empleado: ");
-//        String dni = scanner.nextLine();
         entradaGenerica.pedirDatos(null);
         System.out.print("Ingrese el tipo de empleado (1 Analista) (2 progamador) ");
         int tipoEmpleado = obtenerNumero(scanner, 2);

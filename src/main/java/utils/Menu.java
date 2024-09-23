@@ -10,4 +10,10 @@ public class Menu {
         System.out.println("4- Borrar " + entidad);
         System.out.println("0- Exit.");
     }
+
+    public static void mostrarAtributosModificables() {
+        System.out.println("1- Nombre");
+        System.out.println("2- Apellido");
+        System.out.println("3- Todos");
+    }
 }
