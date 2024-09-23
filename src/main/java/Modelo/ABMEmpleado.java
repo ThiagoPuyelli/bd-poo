@@ -78,6 +78,7 @@ public class ABMEmpleado implements ABM {
                 return;
             }
             // Modificar los atributos del empleado.
+            System.out.println("Elija que desea modificar: ");
             mostrarAtributosModificables();
             int opcion = obtenerNumero(scanner, 3);
             EntradaGenerica<Empleado> entrada = new EntradaGenerica<>(empleado);
@@ -97,7 +98,6 @@ public class ABMEmpleado implements ABM {
             System.out.println("Empleado modificado con exito!");
         } catch (Exception e) {
             System.out.println("An error has occurred!");
-            e.printStackTrace();
         }
     }
 
@@ -148,7 +148,6 @@ public class ABMEmpleado implements ABM {
 
         } catch (Exception e) {
             System.out.println("Ha ocurrido un error.");
-            e.printStackTrace();
         }
     }
 
@@ -178,7 +177,7 @@ public class ABMEmpleado implements ABM {
             mostrarEmpleadoPorDni(empleado.getDni());
         } catch (Exception e) {
             entityTransaction.rollback();
-            e.printStackTrace(); // cambiar.
+            System.out.println("Ha ocurrido un error, revise los datos ingrsados.");
         }
     }
 
@@ -191,7 +190,7 @@ public class ABMEmpleado implements ABM {
         } catch (Exception e) {
             System.out.println("Ha ocurrido un error!");
             entityTransaction.rollback();
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error inesperado!");
         }
     }
 
@@ -199,6 +198,5 @@ public class ABMEmpleado implements ABM {
     private static void exitApp() {
         if (entityManager != null) entityManager.close();
         if (entityManagerFactory != null) entityManagerFactory.close();
-        scanner.close();
     }
 }
