@@ -1,4 +1,4 @@
-package modelo;
+package Modelo;
 
 import Entidades.Analista;
 import Entidades.Empleado;
@@ -10,11 +10,10 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 import static utils.Input.obtenerNumero;
 
-public class AbmEmpleado {
+public class ABMEmpleado {
     private static EntityManagerFactory entityManagerFactory;
     private static EntityManager entityManager;
     private static EntityTransaction entityTransaction;
