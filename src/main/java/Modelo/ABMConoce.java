@@ -8,12 +8,10 @@ import java.util.List;
 import java.util.Scanner;
 
 import Entidades.Conoce;
-import Entidades.Empleado;
 import Entidades.Lenguaje;
 import Entidades.Programador;
 import utils.ABM;
 import utils.EntradaGenerica;
-import utils.Nivel;
 
 import static utils.EntradaNro.obtenerNumero;
 import static utils.Menu.mostrarMenu;
@@ -151,7 +149,7 @@ public class ABMConoce implements ABM {
     public void mostrarTuplas() {
         System.out.println("{>> Todas las relaciones: \n");
         try {
-            List<Conoce> conoceList = em.createNativeQuery("SELECT * FROM CONOCE", Conoce.class).getResultList();
+            List<Conoce> conoceList = em.createQuery("SELECT * FROM CONOCE", Conoce.class).getResultList();
             conoceList.forEach(System.out::println);
         } catch (Exception e) {
             System.out.println("!>> Ha ocurrido un error!");
@@ -162,7 +160,9 @@ public class ABMConoce implements ABM {
     private static void mostrarRelacionesPorDNI(String dni) {
         System.out.println(">> Lenguajes de programación registradas al programador con DNI " + dni + ": ");
         try {
-            List<Conoce> conoceList = em.createNativeQuery("SELECT * FROM CONOCE WHERE DNI = '" + relConoce.getDni() + "'", Conoce.class).getResultList();
+            List<Conoce> conoceList = em.createQuery("SELECT c FROM Conoce c WHERE c.dni = :dni", Conoce.class)
+                    .setParameter("dni", relConoce.getDni())
+                    .getResultList();
             conoceList.forEach(System.out::println);
 
         } catch (Exception e) {
@@ -178,7 +178,9 @@ public class ABMConoce implements ABM {
         String proDNI = scanner.nextLine();
         System.out.println("<< Ingrese el ID del lenguaje: ");
         String lenID = scanner.nextLine();
-        List<Conoce> resultado = em.createNativeQuery("SELECT * FROM CONOCE WHERE DNI = '" + proDNI + "' AND ID = '" + lenID + "'", Conoce.class).getResultList();
+        List<Conoce> resultado = em.createQuery("SELECT c FROM Conoce c WHERE c.dni = :dni AND c.idLang", Conoce.class)
+                .setParameter("dni", proDNI).setParameter("idLang", lenID)
+                .getResultList();
         return resultado.get(0);
     }
 

@@ -12,7 +12,7 @@ public class Conoce {
     @ManyToMany
     @JoinColumn(name = "id_lenguaje", foreignKey = @ForeignKey(name = "id"))
     @Column(nullable = false)
-    private String idLlang;
+    private String idLang;
     @Column(length = 10, nullable = false)
     private String nivel;
 
@@ -27,11 +27,11 @@ public class Conoce {
     }
 
     public String getIdLlang() {
-        return idLlang;
+        return idLang;
     }
 
     public void setIdLlang(String idLlang) {
-        this.idLlang = idLlang;
+        this.idLang = idLlang;
     }
 
     public String getNivel() {
@@ -46,7 +46,7 @@ public class Conoce {
     public String toString() {
         return "Conoce{" +
                 "dni='" + dni + '\'' +
-                ", idLlang='" + idLlang + '\'' +
+                ", idLlang='" + idLang + '\'' +
                 ", nivel='" + nivel + '\'' +
                 '}';
     }

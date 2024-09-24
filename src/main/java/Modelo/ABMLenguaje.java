@@ -7,7 +7,6 @@ import javax.persistence.Persistence;
 import java.util.List;
 import java.util.Scanner;
 
-import Entidades.Empleado;
 import Entidades.Lenguaje;
 import utils.ABM;
 import utils.EntradaGenerica;
@@ -130,9 +129,9 @@ public class ABMLenguaje implements ABM {
     }
 
     public void mostrarTuplas() {
-        System.out.println("EMPLEADOS\n");
+        System.out.println(">> Lenguajes de programación: \n");
         try {
-            List<Lenguaje> lenguajes = em.createNativeQuery("SELECT * FROM LENGUAJE ", Empleado.class).getResultList();
+            List<Lenguaje> lenguajes = em.createQuery("SELECT * FROM LENGUAJE ", Lenguaje.class).getResultList();
 
             lenguajes.forEach(a -> {
                 System.out.println("{>> LENGUAJES DE PROGRAMACION: ");
