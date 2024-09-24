@@ -31,14 +31,14 @@ public class ABMLenguaje implements ABM {
         System.out.println("ABM LENGUAJE");
         int opcion = -1;
         while (opcion != 0) {
-            mostrarMenu("lenguaje de programación");
+            mostrarMenu(">> Lenguaje de programación");
             opcion = obtenerNumero(scanner);
             scanner.nextLine();
 
             switch (opcion) {
                 // caso para salir.
                 case 0:
-                    System.out.println("Saliendo del ABM Lenguaje ...!\n");
+                    System.out.println(">> Saliendo del ABM Lenguaje ...!\n");
                     exitApp();
                     break;
                 // Crear un nuevo lenguaje.
@@ -58,7 +58,7 @@ public class ABMLenguaje implements ABM {
                     bajaDeTupla(scanner);
                     break;
                 default:
-                    System.out.println("Entrada invalida!");
+                    System.out.println("!>> Entrada invalida!");
             }
         }
     }
@@ -68,7 +68,7 @@ public class ABMLenguaje implements ABM {
         entradaGenerica.pedirDatos(ignoreList);
         try {
             Lenguaje lenguaje1 = em.find(Lenguaje.class, lenguaje.getNombre());
-            if (lenguaje1 != null) System.out.println(">> El lenguaje ya existe en la tabla\n");
+            if (lenguaje1 != null) System.out.println("!>> El lenguaje ya existe en la tabla\n");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -77,7 +77,7 @@ public class ABMLenguaje implements ABM {
         try {
             em.persist(lenguaje);
             et.commit();
-            System.out.println("Lenguaje de programación insertado correctamente!\n");
+            System.out.println(">> Lenguaje de programación insertado correctamente!\n");
             // hacer un query y mostrar el empleado creado.
             mostrarLenguajePorID(lenguaje.getId());
         } catch (Exception e) {
@@ -93,16 +93,16 @@ public class ABMLenguaje implements ABM {
             Lenguaje lenguaje = encontrarLenguaje();
             System.out.println(lenguaje);
             if (lenguaje == null) {
-                System.out.println("Lenguaje no encontrado.");
+                System.out.println("!>> Lenguaje no encontrado.");
                 return;
             }
-            System.out.println("El lenguaje a eliminar es el siguiente:");
+            System.out.println("{>> El lenguaje a eliminar es el siguiente:");
             mostrarLenguajePorID(lenguaje.getId());
             em.remove(lenguaje);
             et.commit();
-            System.out.println("Lenguaje borrado con exito!");
+            System.out.println(">> Lenguaje borrado con exito!");
         } catch (Exception e) {
-            System.out.println("Ha ocurrido un error.");
+            System.out.println("!>> Ha ocurrido un error.");
             et.rollback();
         }
     }
@@ -113,18 +113,18 @@ public class ABMLenguaje implements ABM {
         try {
             Lenguaje lenguaje = encontrarLenguaje();
             if (lenguaje == null) {
-                System.out.println("Lenguaje no encontrado");
+                System.out.println("!>> Lenguaje no encontrado");
                 return;
             }
-            System.out.println("Ingrese el nuevo nombre: ");
+            System.out.println("<< Ingrese el nuevo nombre: ");
             EntradaGenerica<Lenguaje> entrada = new EntradaGenerica<>(lenguaje);
             List<String> ignorar = List.of(new String[]{"id"});
             // pedir datos.
             entrada.pedirDatos(ignorar);
             et.commit();
-            System.out.println("Lenguaje modificado con exito!");
+            System.out.println(">> Lenguaje modificado con exito!");
         } catch (Exception e) {
-            System.out.println("An error has occurred!");
+            System.out.println("!>> Ha ocurrido un error!");
             e.printStackTrace();
         }
     }
@@ -135,23 +135,23 @@ public class ABMLenguaje implements ABM {
             List<Lenguaje> lenguajes = em.createNativeQuery("SELECT * FROM LENGUAJE ", Empleado.class).getResultList();
 
             lenguajes.forEach(a -> {
-                System.out.println("LENGUAJES DE PROGRAMACION");
+                System.out.println("{>> LENGUAJES DE PROGRAMACION: ");
                 System.out.println(a);
             });
 
         } catch (Exception e) {
-            System.out.println("Ha ocurrido un error.");
+            System.out.println("!>> Ha ocurrido un error! ");
             e.printStackTrace();
         }
     }
 
     private static void mostrarLenguajePorID(String id) {
-        System.out.println("Datos del Lenguaje de programación");
+        System.out.println(">> Datos del Lenguaje de programación");
         try {
             Lenguaje lenguaje1 = em.find(Lenguaje.class, id);
             System.out.println(lenguaje1);
         } catch (Exception e) {
-            System.out.println("Ha ocurrido un error!");
+            System.out.println("!>> Ha ocurrido un error!");
             et.rollback();
             e.printStackTrace();
         }
@@ -159,7 +159,7 @@ public class ABMLenguaje implements ABM {
 
     // Busca un lenguaje por su nombre
     private static Lenguaje encontrarLenguaje() {
-        System.out.print("Ingrese el nombre del lenguaje: ");
+        System.out.print("<< Ingrese el nombre del lenguaje: ");
         String nombre = scanner.nextLine();
         return em.find(Lenguaje.class, nombre);
     }

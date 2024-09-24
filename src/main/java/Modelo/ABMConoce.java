@@ -41,7 +41,7 @@ public class ABMConoce implements ABM {
             switch (opcion) {
                 // caso para salir.
                 case 0:
-                    System.out.println("Saliendo del ABM Lenguaje ...!\n");
+                    System.out.println(">> Saliendo del ABM Lenguaje ...!\n");
                     exitApp();
                     break;
                 // Crear un nuevo lenguaje.
@@ -61,7 +61,7 @@ public class ABMConoce implements ABM {
                     bajaDeTupla(scanner);
                     break;
                 default:
-                    System.out.println("Entrada invalida!");
+                    System.out.println("!>> Entrada invalida!");
             }
         }
     }
@@ -74,10 +74,10 @@ public class ABMConoce implements ABM {
            Programador programador = em.find(Programador.class, relConoce.getDni());
            Lenguaje lenguaje = em.find(Lenguaje.class, relConoce.getIdLlang());
            if (programador == null) {
-               System.out.println(">> El Programador no existe en la base de datos\n");
+               System.out.println("!>> El Programador no existe en la base de datos\n");
                return;
            } else if (lenguaje == null) {
-               System.out.println(">> El lenguaje no existe en la base de datos\n");
+               System.out.println("!>> El lenguaje no existe en la base de datos\n");
                return;
            }
         } catch (Exception e) {
@@ -90,9 +90,9 @@ public class ABMConoce implements ABM {
         try {
             em.persist(relConoce);
             et.commit();
-            System.out.println("La relación se ha insertado correctamente!\n");
+            System.out.println(">> La relación se ha insertado correctamente!\n");
             // hacer un query y mostrar el empleado creado.
-            System.out.println(">> Lenguajes asociados al programador con DNI " + relConoce.getDni());
+            System.out.println("{>> Lenguajes asociados al programador con DNI " + relConoce.getDni());
             mostrarRelacionesPorDNI(relConoce.getDni());
         } catch (Exception e) {
             et.rollback();
@@ -101,78 +101,85 @@ public class ABMConoce implements ABM {
     }
 
     public void bajaDeTupla(Scanner scn) {
+        Conoce conoce = encontrarRelacion();
+        System.out.println(conoce);
+        if (conoce == null) {
+            System.out.println("!>> Lenguaje no encontrado.");
+            return;
+        }
+
+        System.out.println("{>> El lenguaje a eliminar es el siguiente:");
+        System.out.println(conoce);
         et = em.getTransaction();
         et.begin();
+
         try {
-            Lenguaje lenguaje = encontrarLenguaje();
-            System.out.println(lenguaje);
-            if (lenguaje == null) {
-                System.out.println("Lenguaje no encontrado.");
-                return;
-            }
-            System.out.println("El lenguaje a eliminar es el siguiente:");
-            mostrarRelacionesPorDNI(relConoce.getDni());
-            em.remove(lenguaje);
+            em.remove(conoce);
             et.commit();
-            System.out.println("Lenguaje borrado con exito!");
+            System.out.println(">> Relación borrada con exito!");
         } catch (Exception e) {
-            System.out.println("Ha ocurrido un error.");
+            System.out.println("!>> Ha ocurrido un error.");
             et.rollback();
         }
     }
 
     public void modificarTupla(Scanner scn) {
+        Conoce conoce = encontrarRelacion();
+        if (conoce == null) {
+            System.out.println("!>> La relación no existe en la base de datos");
+            return;
+        }
+        System.out.println("Relacion a modificar: ");
+        System.out.println(conoce);
+        System.out.println("<< Ingrese el nuevo nivel de conocimiento: ");
+        EntradaGenerica<Conoce> entrada = new EntradaGenerica<>(conoce);
+        List<String> ignorar = List.of(new String[]{"dni","idLang"});
+        // pedir datos.
+        entrada.pedirDatos(ignorar);
+
         et = em.getTransaction();
         et.begin();
         try {
-            Lenguaje lenguaje = encontrarLenguaje();
-            if (lenguaje == null) {
-                System.out.println("Lenguaje no encontrado");
-                return;
-            }
-            System.out.println("Ingrese el nuevo nombre: ");
-            EntradaGenerica<Lenguaje> entrada = new EntradaGenerica<>(lenguaje);
-            List<String> ignorar = List.of(new String[]{"id"});
-            // pedir datos.
-            entrada.pedirDatos(ignorar);
             et.commit();
-            System.out.println("Lenguaje modificado con exito!");
+            System.out.println(">> Relación modificada con exito!");
         } catch (Exception e) {
-            System.out.println("An error has occurred!");
+            System.out.println("!>> Ha ocurrido un error! ");
             e.printStackTrace();
         }
     }
 
     public void mostrarTuplas() {
-        System.out.println(">> Todas las relaciones: \n");
+        System.out.println("{>> Todas las relaciones: \n");
         try {
-            List<Conoce> conoceList = em.createNativeQuery("SELECT * FROM CONOCE ", Conoce.class).getResultList();
+            List<Conoce> conoceList = em.createNativeQuery("SELECT * FROM CONOCE", Conoce.class).getResultList();
             conoceList.forEach(System.out::println);
-
         } catch (Exception e) {
-            System.out.println("Ha ocurrido un error.");
+            System.out.println("!>> Ha ocurrido un error!");
             e.printStackTrace();
         }
     }
 
     private static void mostrarRelacionesPorDNI(String dni) {
-        System.out.println("Datos del Lenguaje de programación");
+        System.out.println(">> Lenguajes de programación registradas al programador con DNI " + dni + ": ");
         try {
-            List<Conoce> conoceList = em.createNativeQuery("SELECT * FROM CONOCE WHERE NOMBRE = '" + relConoce.getDni() + "'", Conoce.class).getResultList();
+            List<Conoce> conoceList = em.createNativeQuery("SELECT * FROM CONOCE WHERE DNI = '" + relConoce.getDni() + "'", Conoce.class).getResultList();
             conoceList.forEach(System.out::println);
 
         } catch (Exception e) {
-            System.out.println("Ha ocurrido un error!");
+            System.out.println("!>> Ha ocurrido un error!");
             et.rollback();
             e.printStackTrace();
         }
     }
 
-    // Busca un lenguaje por su nombre
-    private static Lenguaje encontrarLenguaje() {
-        System.out.print("Ingrese el nombre del lenguaje: ");
-        String nombre = scanner.nextLine();
-        return em.find(Lenguaje.class, nombre);
+    // Busca un relacion por dni y idlang
+    private static Conoce encontrarRelacion() {
+        System.out.print("<< Ingrese el DNI del programador: ");
+        String proDNI = scanner.nextLine();
+        System.out.println("<< Ingrese el ID del lenguaje: ");
+        String lenID = scanner.nextLine();
+        List<Conoce> resultado = em.createNativeQuery("SELECT * FROM CONOCE WHERE DNI = '" + proDNI + "' AND ID = '" + lenID + "'", Conoce.class).getResultList();
+        return resultado.get(0);
     }
 
     // liberar recursos
