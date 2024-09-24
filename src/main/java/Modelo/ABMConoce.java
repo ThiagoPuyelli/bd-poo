@@ -10,8 +10,10 @@ import java.util.Scanner;
 import Entidades.Conoce;
 import Entidades.Empleado;
 import Entidades.Lenguaje;
+import Entidades.Programador;
 import utils.ABM;
 import utils.EntradaGenerica;
+import utils.Nivel;
 
 import static utils.EntradaNro.obtenerNumero;
 import static utils.Menu.mostrarMenu;
@@ -65,22 +67,33 @@ public class ABMConoce implements ABM {
     }
 
     public void altaDeTupla(Scanner scn) {
-        List<String> ignoreList = List.of(new String[]{"id"});
-        entradaGenerica.pedirDatos(ignoreList);
+        System.out.println("< Niveles de especialización del lenguaje: ");
+        System.out.println("\tINICIAL : 0 \n\tMEDIO: 1\n\tAVANZZADO: 2\n");
+        entradaGenerica.pedirDatos(null);
         try {
-            Lenguaje lenguaje1 = em.find(Lenguaje.class, lenguaje.getNombre());
-            if (lenguaje1 != null) System.out.println(">> El lenguaje ya existe en la tabla\n");
+           Programador programador = em.find(Programador.class, relConoce.getDni());
+           Lenguaje lenguaje = em.find(Lenguaje.class, relConoce.getIdLlang());
+           if (programador == null) {
+               System.out.println(">> El Programador no existe en la base de datos\n");
+               return;
+           } else if (lenguaje == null) {
+               System.out.println(">> El lenguaje no existe en la base de datos\n");
+               return;
+           }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         et = em.getTransaction();
         et.begin();// comienzo la transaccion
+
         try {
-            em.persist(lenguaje);
+            em.persist(relConoce);
             et.commit();
-            System.out.println("Lenguaje de programación insertado correctamente!\n");
+            System.out.println("La relación se ha insertado correctamente!\n");
             // hacer un query y mostrar el empleado creado.
-            mostrarLenguajePorID(lenguaje.getId());
+            System.out.println(">> Lenguajes asociados al programador con DNI " + relConoce.getDni());
+            mostrarRelacionesPorDNI(relConoce.getDni());
         } catch (Exception e) {
             et.rollback();
             e.printStackTrace();
@@ -98,7 +111,7 @@ public class ABMConoce implements ABM {
                 return;
             }
             System.out.println("El lenguaje a eliminar es el siguiente:");
-            mostrarLenguajePorID(lenguaje.getId());
+            mostrarRelacionesPorDNI(relConoce.getDni());
             em.remove(lenguaje);
             et.commit();
             System.out.println("Lenguaje borrado con exito!");
@@ -131,14 +144,10 @@ public class ABMConoce implements ABM {
     }
 
     public void mostrarTuplas() {
-        System.out.println("EMPLEADOS\n");
+        System.out.println(">> Todas las relaciones: \n");
         try {
-            List<Lenguaje> lenguajes = em.createNativeQuery("SELECT * FROM LENGUAJE ", Empleado.class).getResultList();
-
-            lenguajes.forEach(a -> {
-                System.out.println("LENGUAJES DE PROGRAMACION");
-                System.out.println(a);
-            });
+            List<Conoce> conoceList = em.createNativeQuery("SELECT * FROM CONOCE ", Conoce.class).getResultList();
+            conoceList.forEach(System.out::println);
 
         } catch (Exception e) {
             System.out.println("Ha ocurrido un error.");
@@ -146,11 +155,12 @@ public class ABMConoce implements ABM {
         }
     }
 
-    private static void mostrarLenguajePorID(String id) {
+    private static void mostrarRelacionesPorDNI(String dni) {
         System.out.println("Datos del Lenguaje de programación");
         try {
-            Lenguaje lenguaje1 = em.find(Lenguaje.class, id);
-            System.out.println(lenguaje1);
+            List<Conoce> conoceList = em.createNativeQuery("SELECT * FROM CONOCE WHERE NOMBRE = '" + relConoce.getDni() + "'", Conoce.class).getResultList();
+            conoceList.forEach(System.out::println);
+
         } catch (Exception e) {
             System.out.println("Ha ocurrido un error!");
             et.rollback();
