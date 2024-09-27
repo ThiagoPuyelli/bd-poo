@@ -10,8 +10,7 @@ public class Programador {
     @JoinColumn(name = "dni")
     private Empleado empleado;
 
-    public Programador() {
-    }
+    public Programador() {}
 
     public Empleado getEmpleado() {
         return empleado;

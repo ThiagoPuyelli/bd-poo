@@ -1,34 +1,41 @@
-package modelo;
+package Modelo;
 
 import Entidades.Analista;
 import Entidades.Empleado;
 import Entidades.Programador;
+import utils.ABM;
+import utils.EntradaGenerica;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
-import static utils.Input.obtenerNumero;
+import static utils.EntradaNro.obtenerNumero;
+import static utils.Menu.mostrarAtributosModificables;
+import static utils.Menu.mostrarMenu;
 
-public class AbmEmpleado {
+public class ABMEmpleado implements ABM {
     private static EntityManagerFactory entityManagerFactory;
     private static EntityManager entityManager;
     private static EntityTransaction entityTransaction;
     private final static Scanner scanner = new Scanner(System.in);
     private static final String NOMBREBD = "analista";
+    private static Empleado empleado = new Empleado();
+    private  static EntradaGenerica<Empleado> entradaGenerica = new EntradaGenerica(empleado);
 
     // Menu general para ejecutar los metodos del ABM.
-    public static void mostrarABM() {
+    @Override
+    public void iniciarABM() {
         entityManagerFactory = Persistence.createEntityManagerFactory(NOMBREBD); //
         entityManager = entityManagerFactory.createEntityManager();
         System.out.println("ABM EMPLEADO");
         int opcion = -1;
         while (opcion != 0) {
-            mostrarMenu();
+            mostrarMenu("empleados");
             opcion = obtenerNumero(scanner);
             scanner.nextLine();
 
@@ -48,6 +55,7 @@ public class AbmEmpleado {
                     break;
                 // Actualizar un empleado
                 case 3:
+                    actualizarEmpleado(scanner);
                     break;
                 // borrar un empleado.
                 case 4:
@@ -56,6 +64,40 @@ public class AbmEmpleado {
                 default:
                     System.out.println("Opcion incorrecta!");
             }
+        }
+    }
+
+    // Actualizar un empleado.
+    private void actualizarEmpleado(Scanner scanner) {
+        entityTransaction = entityManager.getTransaction();
+        entityTransaction.begin();
+        try {
+            Empleado empleado = encontrarEmpleado(scanner);
+            if (empleado == null) {
+                System.out.println("Empleado no encontrado");
+                return;
+            }
+            // Modificar los atributos del empleado.
+            System.out.println("Elija que desea modificar: ");
+            mostrarAtributosModificables();
+            int opcion = obtenerNumero(scanner, 3);
+            EntradaGenerica<Empleado> entrada = new EntradaGenerica<>(empleado);
+            List<String> ignorar = new ArrayList<>();
+            ignorar.add("dni");
+            // pedir datos.
+            if (opcion == 1) {
+                ignorar.add("apellido");
+                entrada.pedirDatos(ignorar);
+            } else if (opcion == 2){
+                ignorar.add("nombre");
+                entrada.pedirDatos(ignorar);
+            } else {
+                entrada.pedirDatos(ignorar);
+            }
+            entityTransaction.commit();
+            System.out.println("Empleado modificado con exito!");
+        } catch (Exception e) {
+            System.out.println("An error has occurred!");
         }
     }
 
@@ -106,7 +148,6 @@ public class AbmEmpleado {
 
         } catch (Exception e) {
             System.out.println("Ha ocurrido un error.");
-            e.printStackTrace();
         }
     }
 
@@ -114,16 +155,10 @@ public class AbmEmpleado {
     private static void crearEmpleado(Scanner scanner) {
         entityTransaction = entityManager.getTransaction();
         entityTransaction.begin(); // comienzo la transaccion
-        System.out.print("Ingrese el nombre del empleado: ");
-        String nombre = scanner.nextLine();
-        System.out.print("Ingrese el apellido del empleado: ");
-        String apellido = scanner.nextLine();
-        System.out.print("Ingrese el dni del empleado: ");
-        String dni = scanner.nextLine();
-        System.out.print("Ingrese el tipo de empleado (1 Analista) (2 progamador) ");
+        entradaGenerica.pedirDatos(null);
+        System.out.print("Ingrese el tipo de empleado (1 Analista) (2 programador) ");
         int tipoEmpleado = obtenerNumero(scanner, 2);
         try {
-            Empleado empleado = new Empleado(apellido, dni, nombre);
             Analista analista;
             Programador programador;
             entityManager.persist(empleado);
@@ -142,7 +177,7 @@ public class AbmEmpleado {
             mostrarEmpleadoPorDni(empleado.getDni());
         } catch (Exception e) {
             entityTransaction.rollback();
-            e.printStackTrace(); // cambiar.
+            System.out.println("Ha ocurrido un error, revise los datos ingrsados.");
         }
     }
 
@@ -155,7 +190,7 @@ public class AbmEmpleado {
         } catch (Exception e) {
             System.out.println("Ha ocurrido un error!");
             entityTransaction.rollback();
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error inesperado!");
         }
     }
 
@@ -163,17 +198,5 @@ public class AbmEmpleado {
     private static void exitApp() {
         if (entityManager != null) entityManager.close();
         if (entityManagerFactory != null) entityManagerFactory.close();
-        scanner.close();
     }
-
-    // Menu de opciones.
-    private static void mostrarMenu() {
-        System.out.println("Por favor, seleccione una opcion: ");
-        System.out.println("1- Crear un empleado.");
-        System.out.println("2- Mostrar todos los empleados.");
-        System.out.println("3- Actualizar un empleado.");
-        System.out.println("4- Borrar un empleado.");
-        System.out.println("0- Exit.");
-    }
-
 }

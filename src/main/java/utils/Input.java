@@ -1,5 +1,7 @@
 package utils;
 
+import exceptions.NumeroFueraRangoException;
+
 import java.lang.reflect.Type;
 import java.util.InputMismatchException;
 import java.util.Scanner;
