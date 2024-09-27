@@ -77,6 +77,7 @@ public class ABMEmpleado implements ABM {
                 System.out.println("Empleado no encontrado");
                 return;
             }
+            mostrarEmpleadoPorDni(empleado.getDni());
             // Modificar los atributos del empleado.
             System.out.println("Elija que desea modificar: ");
             mostrarAtributosModificables();
@@ -96,8 +97,10 @@ public class ABMEmpleado implements ABM {
             }
             entityTransaction.commit();
             System.out.println("Empleado modificado con exito!");
+            mostrarEmpleadoPorDni(empleado.getDni()); // muestro los datos del empleado modificado
         } catch (Exception e) {
             System.out.println("An error has occurred!");
+            entityTransaction.rollback();
         }
     }
 
@@ -133,7 +136,9 @@ public class ABMEmpleado implements ABM {
     private static void mostrarEmpleados(Scanner scanner) {
         System.out.println("EMPLEADOS\n");
         try {
+            @SuppressWarnings("unchecked")
             List<Empleado> analistas = entityManager.createNativeQuery("SELECT E.NOMBRE, E.APELLIDO, E.DNI FROM EMPLEADO E INNER JOIN ANALISTA A ON E.DNI = A.DNI", Empleado.class).getResultList();
+            @SuppressWarnings("unchecked")
             List<Empleado> programadores = entityManager.createNativeQuery("SELECT E.NOMBRE, E.APELLIDO, E.DNI FROM EMPLEADO E INNER JOIN PROGRAMADOR P ON E.DNI = P.DNI", Empleado.class).getResultList();
 
             analistas.forEach(a -> {
