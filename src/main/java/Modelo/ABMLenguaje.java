@@ -80,7 +80,7 @@ public class ABMLenguaje implements ABM {
             // hacer un query y mostrar el empleado creado.
             mostrarLenguajePorID(lenguaje.getId());
         } catch (Exception e) {
-            et.rollback();
+            //et.rollback();
             e.printStackTrace();
         }
     }
@@ -102,7 +102,7 @@ public class ABMLenguaje implements ABM {
             System.out.println(">> Lenguaje borrado con exito!");
         } catch (Exception e) {
             System.out.println("!>> Ha ocurrido un error.");
-            et.rollback();
+            //et.rollback();
         }
     }
 
@@ -131,7 +131,7 @@ public class ABMLenguaje implements ABM {
     public void mostrarTuplas() {
         System.out.println(">> Lenguajes de programación: \n");
         try {
-            List<Lenguaje> lenguajes = em.createQuery("SELECT * FROM LENGUAJE ", Lenguaje.class).getResultList();
+            List<Lenguaje> lenguajes = em.createNativeQuery("SELECT * FROM LENGUAJE ", Lenguaje.class).getResultList();
 
             lenguajes.forEach(a -> {
                 System.out.println("{>> LENGUAJES DE PROGRAMACION: ");
@@ -151,14 +151,14 @@ public class ABMLenguaje implements ABM {
             System.out.println(lenguaje1);
         } catch (Exception e) {
             System.out.println("!>> Ha ocurrido un error!");
-            et.rollback();
+            //et.rollback();
             e.printStackTrace();
         }
     }
 
     // Busca un lenguaje por su nombre
     private static Lenguaje encontrarLenguaje() {
-        System.out.print("<< Ingrese el nombre del lenguaje: ");
+        System.out.print("<< Ingrese el id del lenguaje: ");
         String nombre = scanner.nextLine();
         return em.find(Lenguaje.class, nombre);
     }
@@ -167,6 +167,5 @@ public class ABMLenguaje implements ABM {
     private static void exitApp() {
         if (em != null) em.close();
         if (emf != null) emf.close();
-        scanner.close();
     }
 }

@@ -26,18 +26,23 @@ public class Main {
                 List<Class<?>> clases = ClassFinder.findClassesInPackage("Modelo");
 
                 System.out.println("Elige una opción:");
+                System.out.println("0. Salir");
                 i = 1;
                 for (Class<?> c : clases) {
                     System.out.println(i + ". " + c.getName().split("Modelo.")[1]);
                     i++;
                 }
-                int opcion = scanner.nextInt();
-                if (opcion > clases.size()) {
+                input = scanner.nextInt();
+                if (input > clases.size() || input < 0) {
                     System.out.println("La opción es incorrecta");
-                } else {
-                    Class<?> clase = clases.get(opcion - 1);
+                } else if (input > 0) {
+                    Class<?> clase = clases.get(input - 1);
                     ABM instancia = (ABM) clase.getDeclaredConstructor().newInstance();
                     instancia.iniciarABM();
+                }
+
+                if (input == 0) {
+                    System.out.println("Cierre de aplicacion");
                 }
             } catch (ClassNotFoundException e) {
                 e.printStackTrace(); // Muestra la traza del error

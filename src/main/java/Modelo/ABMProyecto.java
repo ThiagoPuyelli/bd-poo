@@ -1,6 +1,8 @@
 package Modelo;
 
 
+import Entidades.Empleado;
+import Entidades.Gerencia;
 import Entidades.Proyecto;
 import utils.ABM;
 import utils.EntradaGenerica;
@@ -80,12 +82,36 @@ public class ABMProyecto implements ABM {
                 return;
             }
 
+            System.out.println("Elija que desea modificar: ");
+            mostrarAtributosModificables();
+            int opcion = obtenerNumero(scanner, 3);
+            EntradaGenerica<Proyecto> entrada = new EntradaGenerica<>(proyecto1);
+            List<String> ignorar = new ArrayList<>();
+            ignorar.add("id_proyecto");
+            ignorar.add("gerencia");
+            // pedir datos.
+            if (opcion == 1) {
+                ignorar.add("presupuesto");
+                entrada.pedirDatos(ignorar);
+            } else if (opcion == 2){
+                ignorar.add("nombre");
+                entrada.pedirDatos(ignorar);
+            } else {
+                entrada.pedirDatos(ignorar);
+            }
+
             entityTransaction.commit();
             System.out.println("Proyecto modificado con exito!");
         } catch (Exception e) {
             System.out.println("An error has occurred!");
             e.printStackTrace();
         }
+    }
+
+    public static void mostrarAtributosModificables() {
+        System.out.println("1- Nombre");
+        System.out.println("2- Presupuesto");
+        System.out.println("3- Todos");
     }
 
     private static void borrarProyecto(Scanner scanner) {
@@ -105,7 +131,7 @@ public class ABMProyecto implements ABM {
             System.out.println("Proyecto borrado con exito!");
         } catch (Exception e) {
             System.out.println("Ha ocurrido un error.");
-            entityTransaction.rollback();
+            //entityTransaction.rollback();
         }
     }
 
@@ -134,9 +160,20 @@ public class ABMProyecto implements ABM {
         entityTransaction = entityManager.getTransaction();
         entityTransaction.begin(); // comienzo la transaccion
 
-        List<String> ignoreList = List.of(new String[]{});
+        List<String> ignoreList = new ArrayList<String>();
+        ignoreList.add("id_proyecto");
+        ignoreList.add("gerencia");
         entradaGenerica.pedirDatos(ignoreList);
-
+        Gerencia gerencia;
+        do {
+            System.out.println("id_g");
+            int id_g = obtenerNumero(scanner);
+            gerencia = entityManager.find(Gerencia.class, id_g);
+            if (gerencia == null) {
+                System.out.println("La gerencia no existe");
+            }
+        } while (gerencia == null);
+        proyecto.setGerencia(gerencia);
 
         try {
             entityManager.persist(proyecto);
@@ -144,7 +181,7 @@ public class ABMProyecto implements ABM {
             System.out.println("Proyecto creado correctamente!\n");
             mostrarProyectoPorId(proyecto.getId_proyecto());
         } catch (Exception e) {
-            entityTransaction.rollback();
+            //entityTransaction.rollback();
             e.printStackTrace(); // cambiar.
         }
     }
@@ -157,7 +194,7 @@ public class ABMProyecto implements ABM {
             System.out.println(proyecto1);
         } catch (Exception e) {
             System.out.println("Ha ocurrido un error!");
-            entityTransaction.rollback();
+            //entityTransaction.rollback();
             e.printStackTrace();
         }
     }
@@ -166,6 +203,5 @@ public class ABMProyecto implements ABM {
     private static void exitApp() {
         if (entityManager != null) entityManager.close();
         if (entityManagerFactory != null) entityManagerFactory.close();
-        scanner.close();
     }
 }

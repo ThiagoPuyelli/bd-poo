@@ -60,7 +60,6 @@ public class ABMGerencia implements ABM {
                     break;
             }
         }
-        scanner.close();
     }
 
     public void alta (EntradaGenerica<Gerencia> entrada) {

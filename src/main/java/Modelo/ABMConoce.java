@@ -98,7 +98,7 @@ public class ABMConoce implements ABM {
             mostrarRelacionesPorDNI(relConoce.getDni());
 
         } catch (Exception e) {
-            et.rollback();
+            //et.rollback();
             e.printStackTrace();
         }
     }
@@ -123,7 +123,7 @@ public class ABMConoce implements ABM {
 
         } catch (Exception e) {
             System.out.println("!>> Ha ocurrido un error.");
-            et.rollback();
+            //et.rollback();
         }
     }
 
@@ -156,11 +156,11 @@ public class ABMConoce implements ABM {
     public void mostrarTuplas() {
         System.out.println("{>> Todas las relaciones: \n");
         try {
-            List<Conoce> conoceList = em.createQuery("SELECT * FROM CONOCE", Conoce.class).getResultList();
+            List<Conoce> conoceList = em.createNativeQuery("SELECT * FROM CONOCE", Conoce.class).getResultList();
             conoceList.forEach(System.out::println);
 
         } catch (Exception e) {
-            et.rollback();
+            //et.rollback();
             System.err.println("!>> Ha ocurrido un error!");
             e.printStackTrace();
         }
@@ -175,7 +175,7 @@ public class ABMConoce implements ABM {
             conoceList.forEach(System.out::println);
 
         } catch (Exception e) {
-            et.rollback();
+            //et.rollback();
             System.err.println("!>> Ha ocurrido un error!");
             e.printStackTrace();
         }
@@ -197,6 +197,5 @@ public class ABMConoce implements ABM {
     private static void exitApp() {
         if (em != null) em.close();
         if (emf != null) emf.close();
-        scanner.close();
     }
 }

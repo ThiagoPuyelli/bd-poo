@@ -15,9 +15,11 @@ public class Trabaja {
 
     @Id
     @ManyToMany
-    @JoinColumn(name = "id_proyecto", foreignKey = @ForeignKey(name = "id_proyecto"))
+    @JoinColumn(foreignKey = @ForeignKey(name = "id_proyecto"))
+    @Column(nullable = false, name = "id_proyecto")
     private int id;
 
+    @Column(nullable = false, name="horas_semanales")
     private int horasSemanales;
 
 

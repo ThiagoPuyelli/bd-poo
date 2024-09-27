@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -86,7 +87,7 @@ public class ABMTrabaja implements ABM {
             System.out.println("{>> Proyectos asociados al empleado con DNI " + relTrabaja.getDni());
             mostrarRelacionesPorDNI(relTrabaja.getDni());
         } catch (Exception e) {
-            et.rollback();
+            //et.rollback();
             e.printStackTrace();
         }
     }
@@ -110,7 +111,7 @@ public class ABMTrabaja implements ABM {
             System.out.println(">> Relación borrada con exito!");
         } catch (Exception e) {
             System.out.println("!>> Ha ocurrido un error.");
-            et.rollback();
+            //et.rollback();
         }
     }
 
@@ -122,9 +123,10 @@ public class ABMTrabaja implements ABM {
         }
         System.out.println("Relacion a modificar: ");
         System.out.println(trabaja1);
-        System.out.println("<< Ingrese el nombre , el nuevo presupuesto del proyecto   y la nueva gerencia");
         EntradaGenerica<Trabaja> entrada = new EntradaGenerica<>(trabaja1);
-        List<String> ignorar = List.of(new String[]{"id_g"});
+        List<String> ignorar = new ArrayList<>();
+        ignorar.add("id");
+        ignorar.add("dni");
         // pedir datos.
         entrada.pedirDatos(ignorar);
 
@@ -142,7 +144,7 @@ public class ABMTrabaja implements ABM {
     public void mostrarTuplas() {
         System.out.println("{>> Todas las relaciones: \n");
         try {
-            List<Trabaja> conoceList = em.createQuery("SELECT * FROM Trabaja", Trabaja.class).getResultList();
+            List<Trabaja> conoceList = em.createNativeQuery("SELECT * FROM Trabaja", Trabaja.class).getResultList();
             conoceList.forEach(System.out::println);
         } catch (Exception e) {
             System.out.println("!>> Ha ocurrido un error!");
@@ -160,7 +162,7 @@ public class ABMTrabaja implements ABM {
 
         } catch (Exception e) {
             System.out.println("!>> Ha ocurrido un error!");
-            et.rollback();
+            //et.rollback();
             e.printStackTrace();
         }
     }
@@ -168,11 +170,10 @@ public class ABMTrabaja implements ABM {
     // Busca un relacion por dni y por id del proyecto
     private static Trabaja encontrarRelacion() {
         System.out.print("<< Ingrese el DNI del programador: ");
-        String proDNI = scanner.nextLine();
+        String dni = scanner.nextLine();
         System.out.println("<< Ingrese el ID del Proyecto: ");
-        int id = obtenerNumero(scanner);
-        List<Trabaja> resultado = em.createQuery("SELECT c FROM Trabaja c WHERE c.dni = :dni AND c.id_proyecto = :id", Trabaja.class)
-                .setParameter("dni", proDNI).setParameter("id_proyecto",id )
+        int id_proyecto = obtenerNumero(scanner);
+        List<Trabaja> resultado = em.createNativeQuery("SELECT * FROM Trabaja c WHERE c.dni = "+ dni + " AND c.id_proyecto = " + id_proyecto, Trabaja.class)
                 .getResultList();
         return resultado.get(0);
     }
@@ -181,6 +182,5 @@ public class ABMTrabaja implements ABM {
     private static void exitApp() {
         if (em != null) em.close();
         if (emf != null) emf.close();
-        scanner.close();
     }
 }

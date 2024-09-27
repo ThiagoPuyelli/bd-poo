@@ -100,7 +100,7 @@ public class ABMEmpleado implements ABM {
             mostrarEmpleadoPorDni(empleado.getDni()); // muestro los datos del empleado modificado
         } catch (Exception e) {
             System.out.println("An error has occurred!");
-            entityTransaction.rollback();
+            //entityTransaction.rollback();
         }
     }
 
@@ -121,7 +121,7 @@ public class ABMEmpleado implements ABM {
             System.out.println("Empleado borrado con exito!");
         } catch (Exception e) {
             System.out.println("Ha ocurrido un error.");
-            entityTransaction.rollback();
+            //entityTransaction.rollback();
         }
     }
 
@@ -181,7 +181,7 @@ public class ABMEmpleado implements ABM {
             // hacer un query y mostrar el empleado creado.
             mostrarEmpleadoPorDni(empleado.getDni());
         } catch (Exception e) {
-            entityTransaction.rollback();
+            //entityTransaction.rollback();
             System.out.println("Ha ocurrido un error, revise los datos ingrsados.");
         }
     }
@@ -194,7 +194,7 @@ public class ABMEmpleado implements ABM {
             System.out.println(empleado);
         } catch (Exception e) {
             System.out.println("Ha ocurrido un error!");
-            entityTransaction.rollback();
+            //entityTransaction.rollback();
             System.out.println("Ha ocurrido un error inesperado!");
         }
     }

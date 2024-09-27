@@ -6,12 +6,13 @@ import javax.persistence.*;
 @Table(name="PROYECTO")
 public class Proyecto {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false)
     private int id_proyecto;
     @Column(nullable = false, length = 20)
     private String nombre;
     @Column(nullable = false)
-    private double presupuesto;
+    private Double presupuesto;
 
     @ManyToOne
     @JoinColumn(name = "id_g")
@@ -26,7 +27,7 @@ public class Proyecto {
         this.gerencia = gerencia;
     }
 
-    public void setPresupuesto(double presupuesto) {
+    public void setPresupuesto(Double presupuesto) {
         this.presupuesto = presupuesto;
     }
 
@@ -49,10 +50,6 @@ public class Proyecto {
 
     public double getPresupuesto() {
         return presupuesto;
-    }
-
-    public void setPresupuesto(float presupuesto) {
-        this.presupuesto = presupuesto;
     }
 
 
