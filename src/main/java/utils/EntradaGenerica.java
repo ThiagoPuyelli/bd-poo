@@ -20,7 +20,6 @@ public class EntradaGenerica<T> {
             }
             Scanner scanner = new Scanner(System.in);
             Type type = field.getGenericType();
-            System.out.println(type.getTypeName());
             Object dato = Input.getInput(scanner, type, field.getName());
             try {
                 field.set(entidad, dato);
