@@ -6,15 +6,19 @@ import javax.persistence.*;
 @Entity
 @Table( name = "TRABAJA")
 public class Trabaja {
+    @Id
     @ManyToMany
     @JoinColumn(name="dni", foreignKey = @ForeignKey(name="dni"))
     @Column(nullable = false)
     private String dni;
+
+
+    @Id
     @ManyToMany
     @JoinColumn(name = "id_proyecto", foreignKey = @ForeignKey(name = "id_proyecto"))
     private int id;
 
-    private double horasSemanales;
+    private int horasSemanales;
 
 
     public int getId() {
@@ -33,11 +37,11 @@ public class Trabaja {
         this.dni = dni;
     }
 
-    public double getHorasSemanales() {
+    public int getHorasSemanales() {
         return horasSemanales;
     }
 
-    public void setHorasSemanales(double horasSemanales) {
+    public void setHorasSemanales(int horasSemanales) {
         this.horasSemanales = horasSemanales;
     }
 

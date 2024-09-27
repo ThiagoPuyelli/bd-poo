@@ -7,54 +7,52 @@ import javax.persistence.Persistence;
 import java.util.List;
 import java.util.Scanner;
 
-import Entidades.Conoce;
-import Entidades.Lenguaje;
-import Entidades.Programador;
+import Entidades.;
 import utils.ABM;
 import utils.EntradaGenerica;
 
 import static utils.EntradaNro.obtenerNumero;
 import static utils.Menu.mostrarMenu;
 
-public class ABMConoce implements ABM {
+public class ABMTrabaja implements ABM {
     private static EntityManagerFactory emf;
     private static EntityManager em;
     private static EntityTransaction et;
     private static final Scanner scanner = new Scanner(System.in);
     private static final String NOMBREBD = "analista";
-    private static final Conoce relConoce = new Conoce();
-    private static final EntradaGenerica<Conoce> entradaGenerica = new EntradaGenerica<>(relConoce);
+    private static final Trabaja relTrabaja = new Trabaja();
+    private static final EntradaGenerica<Trabaja> entradaGenerica = new EntradaGenerica<>(relTrabaja);
 
     @Override
     public void iniciarABM() {
         emf = Persistence.createEntityManagerFactory(NOMBREBD); //
         em = emf.createEntityManager();
-        System.out.println("ABM DE LOS LENGUAJES DE PROGRAMACION CONOCIDOS POR UN PROGRAMADOR");
+        System.out.println("ABM Trabaja");
         int opcion = -1;
         while (opcion != 0) {
-            mostrarMenu(">> Lenguajes conocidos por el programador");
+            mostrarMenu("Trabajadores");
             opcion = obtenerNumero(scanner);
             scanner.nextLine();
 
             switch (opcion) {
                 // caso para salir.
                 case 0:
-                    System.out.println(">> Saliendo del ABM Lenguaje ...!\n");
+                    System.out.println(">> Saliendo del ABM Trabaja ...!\n");
                     exitApp();
                     break;
-                // Crear un nuevo lenguaje.
+                // Crear un nueva relacion Trabaja.
                 case 1:
                     altaDeTupla(scanner);
                     break;
-                // Mostrar todos los lenguajes.
+                // Mostrar todos las relaciones Trabaja.
                 case 2:
                     mostrarTuplas();
                     break;
-                // Actualizar un lenguaje
+                // Actualizar un Trabaja
                 case 3:
                     modificarTupla(scanner);
                     break;
-                // borrar un lenguaje
+                // borrar un Trabaja
                 case 4:
                     bajaDeTupla(scanner);
                     break;
@@ -65,33 +63,28 @@ public class ABMConoce implements ABM {
     }
 
     public void altaDeTupla(Scanner scn) {
-        System.out.println("< Niveles de especialización del lenguaje: ");
-        System.out.println("\tINICIAL : 0 \n\tMEDIO: 1\n\tAVANZZADO: 2\n");
-        entradaGenerica.pedirDatos(null);
+        List<String> ignoreList = List.of(new String[]{"id"});
+        entradaGenerica.pedirDatos(ignoreList);
         try {
-           Programador programador = em.find(Programador.class, relConoce.getDni());
-           Lenguaje lenguaje = em.find(Lenguaje.class, relConoce.getIdLlang());
-           if (programador == null) {
-               System.out.println("!>> El Programador no existe en la base de datos\n");
-               return;
-           } else if (lenguaje == null) {
-               System.out.println("!>> El lenguaje no existe en la base de datos\n");
-               return;
-           }
+            Empleado  empleado1= em.find(Empleado.class, relTrabaja.getDni());
+            Proyecto  proyecto1= em.find(Proyecto.class,relTrabaja.getId());
+
+            if (empleado1 != null) System.out.println("!>> El Empleado no existe en la base de datos \n");
+            if (proyecto1 != null) System.out.println("!>> El Proyecto no existe en la base de datos \n");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         et = em.getTransaction();
         et.begin();// comienzo la transaccion
 
         try {
-            em.persist(relConoce);
+            em.persist(relTrabaja);
             et.commit();
             System.out.println(">> La relación se ha insertado correctamente!\n");
-            // hacer un query y mostrar el empleado creado.
-            System.out.println("{>> Lenguajes asociados al programador con DNI " + relConoce.getDni());
-            mostrarRelacionesPorDNI(relConoce.getDni());
+            // hacer un query y mostrar el trabajo creado.
+            System.out.println("{>> Proyectos asociados al empleado con DNI " + relTrabaja.getDni());
+            mostrarRelacionesPorDNI(relTrabaja.getDni());
         } catch (Exception e) {
             et.rollback();
             e.printStackTrace();
@@ -99,20 +92,20 @@ public class ABMConoce implements ABM {
     }
 
     public void bajaDeTupla(Scanner scn) {
-        Conoce conoce = encontrarRelacion();
-        System.out.println(conoce);
-        if (conoce == null) {
+        Trabaja trabaja1 = encontrarRelacion();
+        System.out.println(trabaja1);
+        if (trabaja1 == null) {
             System.out.println("!>> Lenguaje no encontrado.");
             return;
         }
 
         System.out.println("{>> El lenguaje a eliminar es el siguiente:");
-        System.out.println(conoce);
+        System.out.println(trabaja1);
         et = em.getTransaction();
         et.begin();
 
         try {
-            em.remove(conoce);
+            em.remove(trabaja1);
             et.commit();
             System.out.println(">> Relación borrada con exito!");
         } catch (Exception e) {
@@ -122,16 +115,16 @@ public class ABMConoce implements ABM {
     }
 
     public void modificarTupla(Scanner scn) {
-        Conoce conoce = encontrarRelacion();
-        if (conoce == null) {
+        Trabaja trabaja1 = encontrarRelacion();
+        if (trabaja1 == null) {
             System.out.println("!>> La relación no existe en la base de datos");
             return;
         }
         System.out.println("Relacion a modificar: ");
-        System.out.println(conoce);
-        System.out.println("<< Ingrese el nuevo nivel de conocimiento: ");
-        EntradaGenerica<Conoce> entrada = new EntradaGenerica<>(conoce);
-        List<String> ignorar = List.of(new String[]{"dni","idLang"});
+        System.out.println(trabaja1);
+        System.out.println("<< Ingrese el nuevo nivel de : ");
+        EntradaGenerica<Trabaja> entrada = new EntradaGenerica<>(trabaja1);
+        List<String> ignorar = List.of(new String[]{"dni","id_proyecto"});
         // pedir datos.
         entrada.pedirDatos(ignorar);
 
@@ -149,7 +142,7 @@ public class ABMConoce implements ABM {
     public void mostrarTuplas() {
         System.out.println("{>> Todas las relaciones: \n");
         try {
-            List<Conoce> conoceList = em.createQuery("SELECT * FROM CONOCE", Conoce.class).getResultList();
+            List<Trabaja> conoceList = em.createQuery("SELECT * FROM Trabaja", Trabaja.class).getResultList();
             conoceList.forEach(System.out::println);
         } catch (Exception e) {
             System.out.println("!>> Ha ocurrido un error!");
@@ -158,10 +151,10 @@ public class ABMConoce implements ABM {
     }
 
     private static void mostrarRelacionesPorDNI(String dni) {
-        System.out.println(">> Lenguajes de programación registradas al programador con DNI " + dni + ": ");
+        System.out.println(">> Lenguajes de Trabaja registradas al programador con DNI " + dni + ": ");
         try {
-            List<Conoce> conoceList = em.createQuery("SELECT c FROM Conoce c WHERE c.dni = :dni", Conoce.class)
-                    .setParameter("dni", relConoce.getDni())
+            List<Trabaja> conoceList = em.createQuery("SELECT c FROM Trabaja c WHERE c.dni = :dni", Trabaja.class)
+                    .setParameter("dni", relTrabaja.getDni())
                     .getResultList();
             conoceList.forEach(System.out::println);
 
@@ -172,14 +165,14 @@ public class ABMConoce implements ABM {
         }
     }
 
-    // Busca un relacion por dni y idlang
-    private static Conoce encontrarRelacion() {
+    // Busca un relacion por dni y por id del proyecto
+    private static Trabaja encontrarRelacion() {
         System.out.print("<< Ingrese el DNI del programador: ");
         String proDNI = scanner.nextLine();
-        System.out.println("<< Ingrese el ID del lenguaje: ");
-        String lenID = scanner.nextLine();
-        List<Conoce> resultado = em.createQuery("SELECT c FROM Conoce c WHERE c.dni = :dni AND c.idLang = :lenId", Conoce.class)
-                .setParameter("dni", proDNI).setParameter("idLang", lenID)
+        System.out.println("<< Ingrese el ID del Proyecto: ");
+        int id = obtenerNumero(scanner);
+        List<Trabaja> resultado = em.createQuery("SELECT c FROM Trabaja c WHERE c.dni = :dni AND c.id_proyecto = :id", Trabaja.class)
+                .setParameter("dni", proDNI).setParameter("id_proyecto",id )
                 .getResultList();
         return resultado.get(0);
     }

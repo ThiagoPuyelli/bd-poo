@@ -3,6 +3,7 @@ package Entidades;
 import javax.persistence.*;
 
 @Entity
+@Table(name="PROYECTO")
 public class Proyecto {
     @Id
     @Column(nullable = false)
