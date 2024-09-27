@@ -7,7 +7,7 @@ import javax.persistence.Persistence;
 import java.util.List;
 import java.util.Scanner;
 
-import Entidades.;
+import Entidades.*;
 import utils.ABM;
 import utils.EntradaGenerica;
 
@@ -63,7 +63,7 @@ public class ABMTrabaja implements ABM {
     }
 
     public void altaDeTupla(Scanner scn) {
-        List<String> ignoreList = List.of(new String[]{"id"});
+        List<String> ignoreList = List.of(new String[]{});
         entradaGenerica.pedirDatos(ignoreList);
         try {
             Empleado  empleado1= em.find(Empleado.class, relTrabaja.getDni());
@@ -95,11 +95,11 @@ public class ABMTrabaja implements ABM {
         Trabaja trabaja1 = encontrarRelacion();
         System.out.println(trabaja1);
         if (trabaja1 == null) {
-            System.out.println("!>> Lenguaje no encontrado.");
+            System.out.println("!>> Proyecto no encontrado.");
             return;
         }
 
-        System.out.println("{>> El lenguaje a eliminar es el siguiente:");
+        System.out.println("{>> El Proyecto a eliminar es el siguiente:");
         System.out.println(trabaja1);
         et = em.getTransaction();
         et.begin();
@@ -122,9 +122,9 @@ public class ABMTrabaja implements ABM {
         }
         System.out.println("Relacion a modificar: ");
         System.out.println(trabaja1);
-        System.out.println("<< Ingrese el nuevo nivel de : ");
+        System.out.println("<< Ingrese el nombre , el nuevo presupuesto del proyecto   y la nueva gerencia");
         EntradaGenerica<Trabaja> entrada = new EntradaGenerica<>(trabaja1);
-        List<String> ignorar = List.of(new String[]{"dni","id_proyecto"});
+        List<String> ignorar = List.of(new String[]{"id_g"});
         // pedir datos.
         entrada.pedirDatos(ignorar);
 
