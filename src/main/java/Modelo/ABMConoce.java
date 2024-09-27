@@ -107,11 +107,11 @@ public class ABMConoce implements ABM {
         Conoce conoce = encontrarRelacion();
         System.out.println(conoce);
         if (conoce == null) {
-            System.out.println("!>> Lenguaje no encontrado.");
+            System.out.println("!>> Relación no encontrada.");
             return;
         }
 
-        System.out.println("{>> El lenguaje a eliminar es el siguiente:");
+        System.out.println("{>> La relación a eliminar es el siguiente:");
         System.out.println(conoce);
         et = em.getTransaction();
         et.begin();
