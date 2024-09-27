@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Lenguaje {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(length = 30, nullable = false, unique = true)
+    @Column(length = 4, nullable = false, unique = true)
     private String id;
     @Column(length = 30, columnDefinition = "", nullable = false, unique = true)
     private String nombre;

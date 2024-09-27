@@ -1,17 +1,21 @@
 package Entidades;
 
+import utils.Nivel;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "CONOCE")
 public class Conoce {
-    @ManyToMany
+    @Id
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "dni", foreignKey = @ForeignKey(name = "dni"))
-    @Column(nullable = false)
+    @Column(nullable = false, length = 8)
     private String dni;
-    @ManyToMany
+    @Id
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_lenguaje", foreignKey = @ForeignKey(name = "id"))
-    @Column(nullable = false)
+    @Column(nullable = false, length = 4)
     private String idLang;
     @Column(length = 10, nullable = false)
     private String nivel;
@@ -38,8 +42,12 @@ public class Conoce {
         return nivel;
     }
 
-    public void setNivel(String nivel) {
-        this.nivel = nivel;
+    public void setNivel(int nivel) {
+        switch (nivel) {
+            case 1 : this.nivel = Nivel.INICIAL.toString();
+            case 2 : this.nivel = Nivel.MEDIO.toString();
+            case 3 : this.nivel = Nivel.AVANZADO.toString();
+        }
     }
 
     @Override

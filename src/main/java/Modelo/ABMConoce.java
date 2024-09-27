@@ -12,6 +12,7 @@ import Entidades.Lenguaje;
 import Entidades.Programador;
 import utils.ABM;
 import utils.EntradaGenerica;
+import utils.EntradaNro;
 
 import static utils.EntradaNro.obtenerNumero;
 import static utils.Menu.mostrarMenu;
@@ -66,8 +67,11 @@ public class ABMConoce implements ABM {
 
     public void altaDeTupla(Scanner scn) {
         System.out.println("< Niveles de especialización del lenguaje: ");
-        System.out.println("\tINICIAL : 0 \n\tMEDIO: 1\n\tAVANZZADO: 2\n");
-        entradaGenerica.pedirDatos(null);
+        System.out.println("\tINICIAL : 0 \n\tMEDIO: 1\n\tAVANZADO: 2\n");
+        System.out.println(">> Ingrese el nro respectivo al nivel de especialización :");
+
+        relConoce.setNivel(obtenerNumero(scn, 3));
+        entradaGenerica.pedirDatos(List.of("nivel"));
         try {
            Programador programador = em.find(Programador.class, relConoce.getDni());
            Lenguaje lenguaje = em.find(Lenguaje.class, relConoce.getIdLlang());
@@ -83,7 +87,7 @@ public class ABMConoce implements ABM {
         }
 
         et = em.getTransaction();
-        et.begin();// comienzo la transaccion
+        et.begin();
 
         try {
             em.persist(relConoce);
@@ -92,6 +96,7 @@ public class ABMConoce implements ABM {
             // hacer un query y mostrar el empleado creado.
             System.out.println("{>> Lenguajes asociados al programador con DNI " + relConoce.getDni());
             mostrarRelacionesPorDNI(relConoce.getDni());
+
         } catch (Exception e) {
             et.rollback();
             e.printStackTrace();
@@ -115,6 +120,7 @@ public class ABMConoce implements ABM {
             em.remove(conoce);
             et.commit();
             System.out.println(">> Relación borrada con exito!");
+
         } catch (Exception e) {
             System.out.println("!>> Ha ocurrido un error.");
             et.rollback();
@@ -141,7 +147,8 @@ public class ABMConoce implements ABM {
             et.commit();
             System.out.println(">> Relación modificada con exito!");
         } catch (Exception e) {
-            System.out.println("!>> Ha ocurrido un error! ");
+
+            System.err.println("!>> Ha ocurrido un error! ");
             e.printStackTrace();
         }
     }
@@ -151,8 +158,10 @@ public class ABMConoce implements ABM {
         try {
             List<Conoce> conoceList = em.createQuery("SELECT * FROM CONOCE", Conoce.class).getResultList();
             conoceList.forEach(System.out::println);
+
         } catch (Exception e) {
-            System.out.println("!>> Ha ocurrido un error!");
+            et.rollback();
+            System.err.println("!>> Ha ocurrido un error!");
             e.printStackTrace();
         }
     }
@@ -166,8 +175,8 @@ public class ABMConoce implements ABM {
             conoceList.forEach(System.out::println);
 
         } catch (Exception e) {
-            System.out.println("!>> Ha ocurrido un error!");
             et.rollback();
+            System.err.println("!>> Ha ocurrido un error!");
             e.printStackTrace();
         }
     }
@@ -178,7 +187,7 @@ public class ABMConoce implements ABM {
         String proDNI = scanner.nextLine();
         System.out.println("<< Ingrese el ID del lenguaje: ");
         String lenID = scanner.nextLine();
-        List<Conoce> resultado = em.createQuery("SELECT c FROM Conoce c WHERE c.dni = :dni AND c.idLang", Conoce.class)
+        List<Conoce> resultado = em.createQuery("SELECT c FROM Conoce c WHERE c.dni = :dni AND c.idLang = :idLang", Conoce.class)
                 .setParameter("dni", proDNI).setParameter("idLang", lenID)
                 .getResultList();
         return resultado.get(0);
