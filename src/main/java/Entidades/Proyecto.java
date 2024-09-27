@@ -13,17 +13,16 @@ public class Proyecto {
     private double presupuesto;
 
     @ManyToOne
-    @JoinColumn(name = "id_gerencia", foreignKey = @ForeignKey(name = "id_g"))
-    private int id_gerencia;
+    @JoinColumn(name = "id_g")
+    private Gerencia gerencia;
 
 
-
-    public int getId_gerencia() {
-        return id_gerencia;
+    public Gerencia getGerencia() {
+        return gerencia;
     }
 
-    public void setId_gerencia(int id_gerencia) {
-        this.id_gerencia = id_gerencia;
+    public void setGerencia(Gerencia gerencia) {
+        this.gerencia = gerencia;
     }
 
     public void setPresupuesto(double presupuesto) {
@@ -61,7 +60,8 @@ public class Proyecto {
         return "Proyecto{" +
                 "id_proyecto=" + id_proyecto +'\''+
                 ", nombre='" + nombre + '\'' +
-                ", presupuesto=" + presupuesto +
+                ", presupuesto=" + presupuesto +'\''+
+                ", gerencia = " +gerencia.toString()+
                 '}';
     }
 }
